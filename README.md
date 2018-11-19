@@ -1,20 +1,22 @@
 #include <iostream>
+#include <random>
 #define LOG(x) std::cout << x << std::endl; //Defines simply to save myself some time
 #define FIVE for (int x = 0; x < 5; x++)
 void ifFight(int*, int*);
-bool ifMercy(int*);
+bool ifMercy(int*, int*);
 void ifItem(int*, int*, int*);
 void ifAct(int*);
 
 
 
-bool ifMercy(int* tillMercyPoint)
+bool ifMercy(int* tillMercyPoint, int* runChance)
 {
 	char input;
 	LOG("Do You Want To Spare Or Run?");
 	LOG("s - Spare : r - Run");
 	std::cin >> input;
-	if (input == 's') {
+	if (input == 's') 
+	{
 		FIVE //Runs through the five numbers to check if the spare is possible
 		{
 			if (tillMercyPoint[x] != 0) //0's represent spare ready
@@ -24,9 +26,22 @@ bool ifMercy(int* tillMercyPoint)
 		}
 		return true; //Returns true if spare ready
 	}
-	else if(input == 'r') { //Did not implement run yet
-		LOG("YOU CAN'T!");
-		return false;
+	else if(input == 'r') 
+	{
+		std::mt19937 rng;
+		rng.seed(std::random_device()());
+		std::uniform_int_distribution<std::mt19937::result_type> random(1, *runChance); 
+		int didRun = random(rng);
+		if (didRun == 1) 
+		{
+			LOG("You Ran Coward!");
+			return true;
+		}
+		else 
+		{
+			LOG("YOU FAILED TO RUN MWAHAHAHAHAHA!");
+			return false;
+		}
 	}
 }
 
@@ -36,7 +51,8 @@ void ifAct(int* tillMercyPoint)
 	LOG("1, 2, 3, 4 or 5");
 	int action;
 	std::cin >> action;
-	if (tillMercyPoint[action - 1] != 0) { 
+	if (tillMercyPoint[action - 1] != 0) 
+	{ 
 		tillMercyPoint[action - 1] --; //Will lower the current index's array value by one to bring it closer to the spare ready
 	}
 }
@@ -46,7 +62,8 @@ void ifFight(int* enemyHealthBar, int* playerDamageStrengthPoint)
 	*enemyHealthBar -= *playerDamageStrengthPoint; //Reduces the current enemy's health by the current player damage
 }
 
-void ifItem(int* itemsPoint, int* playerHealthPoint, int* playerDamageStrengthPoint) {
+void ifItem(int* itemsPoint, int* playerHealthPoint, int* playerDamageStrengthPoint) 
+{
 	LOG("What Item Do You Want To Use?");
 	LOG("1, 2, 3, 4 or 5");
 	int item;
@@ -79,22 +96,26 @@ void ifItem(int* itemsPoint, int* playerHealthPoint, int* playerDamageStrengthPo
 	}
 }
 //Ignore these next few functions I will get rid of them later but I am going to keep trying something until then
-void ifFroggit() {
+void ifFroggit() 
+{
 	int tillMercy[5] = { 1, 1, 1, 0, 0 };
 	int healthEnemy = 20;
 	int enemyDamageStrength = 2;
 }
-void ifWhimsun() {
+void ifWhimsun() 
+{
 	int tillMercy[5] = { 0, 0, 0, 0, 0 };
 	int healthEnemy = 1;
 	int enemyDamageStrength = 0;
 }
-void ifNapstablook() {
+void ifNapstablook() 
+{
 	int tillMercy[5] = { 1, 1, 1, 1, 1 };
 	int healthEnemy = 20;
 	int enemyDamageStrength = 5;
 }
-void ifToriel(int* tillMercyPoint, int* healthEnemyPoint, int* enemyDamageStrengthPoint) {
+void ifToriel(int* tillMercyPoint, int* healthEnemyPoint, int* enemyDamageStrengthPoint) 
+{
 	int tillMercy[5] = { 2, 2, 2, 2, 2 };
 	tillMercyPoint = tillMercy;
 	LOG(tillMercyPoint);
@@ -120,6 +141,8 @@ int main()
 	int* healthEnemyPoint = &healthEnemy; //POINT!!!
 	int enemyDamageStrength = 0; //Enemy's strength
 	int* enemyDamageStrengthPoint = &enemyDamageStrength; //pOiNTinG111
+	int runChance = 0;
+	int* runChancePoint = &runChance;
 	switch (monster) { //I will just explain one as they are the essentially the same
 	case 'F': //Froggit data
 		for (int x = 0; x < 3; x++) 
@@ -128,6 +151,7 @@ int main()
 		}
 		healthEnemy = 20; //Sets the health
 		enemyDamageStrength = 2; //Sets the strength
+		runChance = 4;
 		break;
 	case 'T':
 		FIVE
@@ -136,6 +160,7 @@ int main()
 		}
 		healthEnemy = 100;
 		enemyDamageStrength = 10;
+		runChance = 10000;
 		break;
 	case 'N':
 		FIVE
@@ -144,9 +169,12 @@ int main()
 		}
 		healthEnemy = 20;
 		enemyDamageStrength = 5;
+		runChance = 25;
+
 		break;
 	case 'W':
 		healthEnemy = 0;
+		runChance = 1;
 	}
 	
 	/* 
@@ -159,7 +187,8 @@ int main()
 	bool run = false; //Useless for now
 	LOG("Your health:" << playerHealth);
 	LOG("Enemy health:" << healthEnemy);
-	do {
+	do 
+	{
 		char input;
 		LOG("");
 		LOG("What Do You Want To Do?");
@@ -177,7 +206,7 @@ int main()
 			ifItem(itemsPoint, playerHealthPoint, playerDamageStrengthPoint);
 			break;
 		case 'm': //Mercy Action
-			ifMercy(tillMercyPoint);
+			ifMercy(tillMercyPoint, runChancePoint);
 			break;
 		}
 		if (healthEnemy > 0) { //Checks if the enemy is dead or not
@@ -186,7 +215,8 @@ int main()
 		LOG("");
 		LOG("Your health:" << playerHealth);
 		LOG("Enemy health:" << healthEnemy);
-		if (playerHealth == 0 || healthEnemy == 0) { //Checks if player or enemy is dead
+		if (playerHealth == 0 || healthEnemy == 0) 
+		{ //Checks if player or enemy is dead
 			defeated = true; //Turns exit condition to true as the fight is over
 		}
 	} while (defeated == false && run == false);
