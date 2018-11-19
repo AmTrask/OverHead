@@ -159,7 +159,7 @@ int main()
 			tillMercyPoint[x] = 2;
 		}
 		healthEnemy = 100;
-		enemyDamageStrength = 10;
+		enemyDamageStrength = 1;
 		runChance = 10000;
 		break;
 	case 'N':
@@ -206,7 +206,10 @@ int main()
 			ifItem(itemsPoint, playerHealthPoint, playerDamageStrengthPoint);
 			break;
 		case 'm': //Mercy Action
-			ifMercy(tillMercyPoint, runChancePoint);
+			if (ifMercy(tillMercyPoint, runChancePoint) == true)
+			{
+				defeated = true;
+			}
 			break;
 		}
 		if (healthEnemy > 0) { //Checks if the enemy is dead or not
@@ -215,7 +218,7 @@ int main()
 		LOG("");
 		LOG("Your health:" << playerHealth);
 		LOG("Enemy health:" << healthEnemy);
-		if (playerHealth == 0 || healthEnemy == 0) 
+		if (playerHealth <= 0 || healthEnemy <= 0) 
 		{ //Checks if player or enemy is dead
 			defeated = true; //Turns exit condition to true as the fight is over
 		}
