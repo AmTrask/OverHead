@@ -8,7 +8,8 @@ Player::Player(double posX, double posY)
 
 
 	this->health = 100;
-	
+	this->attack = 10;
+
 }
 
 void Player::takeDmg(int damage)
@@ -23,6 +24,14 @@ int Player::getHP()
 void Player::setHP()
 {
 	health = 0;
+}
+int Player::getAttack() 
+{
+	return attack;
+}
+void Player::setAttack(int buff)
+{
+	attack += buff;
 }
 
 void Player::move(float frametime)

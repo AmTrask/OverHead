@@ -8,6 +8,7 @@ a prototype for a ray caster in console
 #include <cmath>
 #include <random>
 #include "Player.h"
+#include "Enemy.h"
 #define LOG(x) std::cout << x << std::endl; //Defines simply to save myself some time
 #define FIVE for (int x = 0; x < 5; x++)
 
@@ -15,16 +16,16 @@ a prototype for a ray caster in console
 const short w = 1500;
 const short h = 400;
 int gamestate = 0; //0 = overworld, 1 = initcombat, 2 = combat
-Player p(1,1);
+Player p(1, 1);
+Enemy e;
 void ifFight(int*, int*);
-bool ifMercy(int*, int*);
+void ifMercy(int*, int*);
 void ifItem(int*, int*, int*);
 void ifAct(int*);
 
 int backgound[h][w] = { {} };
 
 //placeholder variables (these should not be in the final program
-int enemyHealth = 50;
 
 //pls forgive D:
 
@@ -32,12 +33,11 @@ int enemyHealth = 50;
 
 
 
-bool ifMercy(int* tillMercyPoint, int* runChance)
+void ifMercy(int* tillMercyPoint, int* runChance)
 {
 	p.setX(1);
 	gamestate = 0;
-	
-	return true;
+
 	//char input;
 	//LOG("Do You Want To Spare Or Run?");
 	//LOG("s - Spare : r - Run");
@@ -74,25 +74,17 @@ bool ifMercy(int* tillMercyPoint, int* runChance)
 
 void ifAct(int* tillMercyPoint)
 {
-	LOG("What Action Do You Want To Do?");
-	LOG("1, 2, 3, 4 or 5");
-	int action;
-	std::cin >> action;
-	if (tillMercyPoint[action - 1] != 0)
-	{
-		tillMercyPoint[action - 1] --; //Will lower the current index's array value by one to bring it closer to the spare ready
-	}
+	e.lowerMercyPoints();
 }
 
 void ifFight(int* enemyHealthBar, int* playerDamageStrengthPoint, CHAR_INFO *screen)
 {
-	
-	//*enemyHealthBar -= *playerDamageStrengthPoint; //Reduces the current enemy's health by the current player damage
 
+	//*enemyHealthBar -= *playerDamageStrengthPoint; //Reduces the current enemy's health by the current player damage
 	//draw over player health bar
 	if (p.getHP() > 0)
 	{
-		p.takeDmg(1);
+		p.takeDmg(e.dealDamage());
 		if (p.getHP() < 0)
 		{
 			p.setHP();
@@ -106,14 +98,14 @@ void ifFight(int* enemyHealthBar, int* playerDamageStrengthPoint, CHAR_INFO *scr
 			}
 		}
 	}
-	if (enemyHealth > 0)
+	if (e.getHP() > 0)
 	{
-		enemyHealth -= 5;
-		if (enemyHealth < 0)
+		e.takeDamage(p.getAttack());
+		if (e.getHP() < 0)
 		{
-			enemyHealth = 0;
+			e.setHP(0);
 		}
-		for (int i = 50; i > enemyHealth; i--)
+		for (int i = 50; i > e.getHP(); i--)
 		{
 			for (int j = 0; j < 5; j++)
 			{
@@ -199,7 +191,7 @@ void initBattleSreen(CHAR_INFO *screen)
 			for (int i = 0; i < 4; i++)
 			{
 				//verticle
-				if ((x ==  365 * i + 100 || x == 365 * i + 300) && (y >= 325 && y <= 375))
+				if ((x == 365 * i + 100 || x == 365 * i + 300) && (y >= 325 && y <= 375))
 				{
 					backgound[y][x] = 8 * 16;
 				}
@@ -212,12 +204,12 @@ void initBattleSreen(CHAR_INFO *screen)
 				//this code will be real jank :( sorry - josh
 				if ((double(x) / 10 < 15 && double(y) / 10 < 4))
 				{
-					backgound[y + 330][x +(365 * i ) + 125] = graphic[y / 10][x / 10] * 8 * 16;
+					backgound[y + 330][x + (365 * i) + 125] = graphic[y / 10][x / 10] * 8 * 16;
 				}
 			}
-					
-		
-			
+
+
+
 
 
 		}
@@ -232,39 +224,39 @@ void initBattleSreen(CHAR_INFO *screen)
 		}
 	}
 	//draw players health bar
-	
-		for (int i = 0; i < p.getHP(); i++)
+
+	for (int i = 0; i < p.getHP(); i++)
+	{
+		for (int j = 0; j < 15; j++)
+		{
+			screen[(j + 290) * w + i + 701].Attributes = 6 * 16;
+		}
+	}
+	if (p.getHP() > 0)
+	{
+
+		for (int i = 100; i > p.getHP(); i--)
 		{
 			for (int j = 0; j < 15; j++)
 			{
-				screen[(j + 290) * w + i + 701].Attributes = 6 * 16;
-			}
-		}
-		if (p.getHP() > 0)
-		{
+				screen[(j + 290) * w + i + 700].Attributes = 4 * 16;
 
-			for (int i = 100; i > p.getHP(); i--)
-			{
-				for (int j = 0; j < 15; j++)
-				{
-					screen[(j + 290) * w + i + 700].Attributes = 4 * 16;
-
-				}
 			}
 		}
-		//draw enemy health bar
-		for (int i = 0; i < enemyHealth; i++)
+	}
+	//draw enemy health bar
+	for (int i = 0; i < e.getHP(); i++)
+	{
+		for (int j = 0; j < 5; j++)
 		{
-			for (int j = 0; j < 5; j++)
-			{
-				screen[(j + 120) * w + i + 725].Attributes = 10 * 16;
-			}
+			screen[(j + 120) * w + i + 725].Attributes = 10 * 16;
 		}
-	
-	
+	}
+
+
 }
 //draws sprite to the screen.
-void draw_sprite(CHAR_INFO *screen, double posX, double posY, int spr[8][8]) 
+void draw_sprite(CHAR_INFO *screen, double posX, double posY, int spr[8][8])
 {
 	for (int x = 0; x < 80; x++)
 	{
@@ -276,7 +268,7 @@ void draw_sprite(CHAR_INFO *screen, double posX, double posY, int spr[8][8])
 				screen[((int)posY + y)* w + ((int)posX + x)].Attributes = spr[y / 10][x / 10] * 16;
 
 			}
-			
+
 
 		}
 	}
@@ -298,7 +290,7 @@ void draw_backgound(CHAR_INFO *screen)
 //draws the backgound for battle screen
 void draw_battle(CHAR_INFO *screen, int selection)
 {
-	
+
 	for (int x = 0; x < w; x++)
 	{
 
@@ -313,14 +305,14 @@ void draw_battle(CHAR_INFO *screen, int selection)
 
 			if (backgound[y][x] != 0)
 			{
-				
+
 				//highlights selected button
 				if (x <= selection * 365 + 325 && x >= selection * 365 + 75 && y > 300)
 				{
 					screen[y*w + x].Attributes = 3 * 16;
 				}
 				//unhighlights things not selected
-				else if ( y > 300)
+				else if (y > 300)
 				{
 					screen[y*w + x].Attributes = 8 * 16;
 
@@ -328,8 +320,8 @@ void draw_battle(CHAR_INFO *screen, int selection)
 			}
 		}
 	}
-	
-	
+
+
 }
 
 //puts everything drawn to "Screen" on the screen
@@ -368,7 +360,7 @@ void gameloop()
 			draw_backgound(screen);
 			posX = p.getX();
 			posY = p.getY();
-			draw_sprite(screen, posX, posY, p.sprite );
+			draw_sprite(screen, posX, posY, p.sprite);
 
 
 
@@ -379,7 +371,7 @@ void gameloop()
 			float frametime = elapsed.count();
 
 			p.move(frametime);
-			
+
 
 			//changes gamestate to combat
 			if (posX >= 300)
@@ -396,7 +388,7 @@ void gameloop()
 		else
 		{
 			static int btnCooldown = 0;
-		//main battle loop	
+			//main battle loop	
 			if (btnCooldown)
 			{
 				btnCooldown--;
@@ -431,21 +423,23 @@ void gameloop()
 					ifFight(0, 0, screen);
 					break;
 				case 1:
-
+					ifAct(0);
 					break;
 				case 2:
 
 					break;
 				case 3:
-					
-					ifMercy(0, 0);
-					initOverworld(screen);
-					enemyHealth = 50;
+					if (e.getMercyPoints() == 0)
+					{
+						ifMercy(0, 0);
+						initOverworld(screen);
+						e.setHP(50);
+					}
 					break;
 				}
 			}
 		}
-		
+
 		printScreen(hconsole, screen, c);
 
 	}
@@ -462,13 +456,13 @@ int main()
 	font.dwFontSize.Y = 2;
 	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &font);
 
-	
+
 
 	gameloop();
-	
-	
+
+
 	//time for modifiers
-	
+
 	system("pause");
 	return 0;
 }

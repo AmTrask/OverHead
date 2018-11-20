@@ -16,8 +16,10 @@ public:
 	double getY();
 	int getHP();
 	void setHP();
+	int getAttack();
+	void setAttack(int buff);
 	void takeDmg(int damage);
-	
+
 	//please put sprite in a different file or something
 	int sprite[8][8] = {
 		{ 00,00,00,06,06,00,00,00 },
@@ -36,7 +38,7 @@ private:
 	std::vector<int> inventory;
 	//combat variables
 	int health;
-	int attack; 
+	int attack;
 
 	//overworld variables
 	double pX, pY;
