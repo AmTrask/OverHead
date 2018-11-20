@@ -6,28 +6,167 @@ a prototype for a ray caster in console
 #include <Windows.h>
 #include <chrono>
 #include <cmath>
+#include <random>
+#include "Player.h"
+#define LOG(x) std::cout << x << std::endl; //Defines simply to save myself some time
+#define FIVE for (int x = 0; x < 5; x++)
 
 //global variables
 const short w = 1500;
 const short h = 400;
-int gamestate = 1; //0 = overworld, 1 = initcombat, 2 = combat
-
-
-
-//Guy on screen, numbers are associated with a colour
-int MockGuy[8][8] = {
-	{ 00,00,00,06,06,00,00,00 },
-	{ 00,00,06,06,06,06,00,00 },
-	{ 00,06,14,14,14,14,06,00 },
-	{ 06,06,14,00,14,00,14,06 },
-	{ 00,00,14,14,00,14,14,00 },
-	{ 00,00,00,00,14,00,00,00 },
-	{ 00,00,12,12,12,12,12,00 },
-	{ 00,00,03,03,03,03,03,00 }
-
-};
+int gamestate = 0; //0 = overworld, 1 = initcombat, 2 = combat
+Player p(1,1);
+void ifFight(int*, int*);
+bool ifMercy(int*, int*);
+void ifItem(int*, int*, int*);
+void ifAct(int*);
 
 int backgound[h][w] = { {} };
+
+//placeholder variables (these should not be in the final program
+int enemyHealth = 50;
+
+//pls forgive D:
+
+
+
+
+
+bool ifMercy(int* tillMercyPoint, int* runChance)
+{
+	p.setX(1);
+	gamestate = 0;
+	
+	return true;
+	//char input;
+	//LOG("Do You Want To Spare Or Run?");
+	//LOG("s - Spare : r - Run");
+	//std::cin >> input;
+	//if (input == 's')
+	//{
+	//	FIVE //Runs through the five numbers to check if the spare is possible
+	//	{
+	//		if (tillMercyPoint[x] != 0) //0's represent spare ready
+	//		{
+	//			return false; //Will return false if not spare ready
+	//		}
+	//	}
+	//	return true; //Returns true if spare ready
+	//}
+	//else if (input == 'r')
+	//{
+	//	std::mt19937 rng;
+	//	rng.seed(std::random_device()());
+	//	std::uniform_int_distribution<std::mt19937::result_type> random(1, *runChance);
+	//	int didRun = random(rng);
+	//	if (didRun == 1)
+	//	{
+	//		LOG("You Ran Coward!");
+	//		return true;
+	//	}
+	//	else
+	//	{
+	//		LOG("YOU FAILED TO RUN MWAHAHAHAHAHA!");
+	//		return false;
+	//	}
+	//}
+}
+
+void ifAct(int* tillMercyPoint)
+{
+	LOG("What Action Do You Want To Do?");
+	LOG("1, 2, 3, 4 or 5");
+	int action;
+	std::cin >> action;
+	if (tillMercyPoint[action - 1] != 0)
+	{
+		tillMercyPoint[action - 1] --; //Will lower the current index's array value by one to bring it closer to the spare ready
+	}
+}
+
+void ifFight(int* enemyHealthBar, int* playerDamageStrengthPoint, CHAR_INFO *screen)
+{
+	
+	//*enemyHealthBar -= *playerDamageStrengthPoint; //Reduces the current enemy's health by the current player damage
+
+	//draw over player health bar
+	if (p.getHP() > 0)
+	{
+		p.takeDmg(1);
+		if (p.getHP() < 0)
+		{
+			p.setHP();
+		}
+
+		for (int i = 100; i > p.getHP(); i--)
+		{
+			for (int j = 0; j < 15; j++)
+			{
+				screen[(j + 290) * w + i + 700].Attributes = 4 * 16;
+			}
+		}
+	}
+	if (enemyHealth > 0)
+	{
+		enemyHealth -= 5;
+		if (enemyHealth < 0)
+		{
+			enemyHealth = 0;
+		}
+		for (int i = 50; i > enemyHealth; i--)
+		{
+			for (int j = 0; j < 5; j++)
+			{
+				screen[(j + 120) * w + i + 724].Attributes = 4 * 16;
+			}
+		}
+	}
+}
+
+void ifItem(int* itemsPoint, int* playerHealthPoint, int* playerDamageStrengthPoint)
+{
+	LOG("What Item Do You Want To Use?");
+	LOG("1, 2, 3, 4 or 5");
+	int item;
+	std::cin >> item;
+	switch (itemsPoint[item - 1]) //Enters the value of the number of the inputed array index to check if there is an item or not
+	{
+	case 1:
+		*playerHealthPoint += 10; //Adds ten health to the player
+		itemsPoint[item - 1] = 0; //Used the item so it's no longer valid so re-use
+		return;
+	case 2:
+		*playerHealthPoint += 30; //Adds 30 health to the user
+		itemsPoint[item - 1] = 0; //Used the item so it's no longer valid so re-use
+		return;
+	case 3:
+		*playerDamageStrengthPoint += 5; //Adds 5 damage to the player
+		itemsPoint[item - 1] = 0; //Used the item so it's no longer valid so re-use
+		return;
+	case 4:
+		*playerDamageStrengthPoint += 10; //Adds 10 damage to the player
+		itemsPoint[item - 1] = 0; //Used the item so it's no longer valid so re-use
+		return;
+	case 5:
+		*playerDamageStrengthPoint -= 5; //Reduces the damage of the player by 5
+		*playerHealthPoint += 50; //Adds 50 health to the player
+		itemsPoint[item - 1] = 0; //Used the item so it's no longer valid so re-use
+		return;
+	case 0:
+		LOG("Nothing here bub"); //If the player tried using an non-existing item
+	}
+}
+
+void initOverworld(CHAR_INFO *screen)
+{
+	for (int i = 0; i < h; i++)
+	{
+		for (int j = 0; j < w; j++)
+		{
+			backgound[i][j] = 0;
+		}
+	}
+}
 
 void initBattleSreen(CHAR_INFO *screen)
 {
@@ -77,7 +216,7 @@ void initBattleSreen(CHAR_INFO *screen)
 				}
 			}
 					
-			
+		
 			
 
 
@@ -92,17 +231,51 @@ void initBattleSreen(CHAR_INFO *screen)
 			screen[y * w + x].Attributes = backgound[y][x];
 		}
 	}
+	//draw players health bar
+	
+		for (int i = 0; i < p.getHP(); i++)
+		{
+			for (int j = 0; j < 15; j++)
+			{
+				screen[(j + 290) * w + i + 701].Attributes = 6 * 16;
+			}
+		}
+		if (p.getHP() > 0)
+		{
+
+			for (int i = 100; i > p.getHP(); i--)
+			{
+				for (int j = 0; j < 15; j++)
+				{
+					screen[(j + 290) * w + i + 700].Attributes = 4 * 16;
+
+				}
+			}
+		}
+		//draw enemy health bar
+		for (int i = 0; i < enemyHealth; i++)
+		{
+			for (int j = 0; j < 5; j++)
+			{
+				screen[(j + 120) * w + i + 725].Attributes = 10 * 16;
+			}
+		}
+	
 	
 }
 //draws sprite to the screen.
 void draw_sprite(CHAR_INFO *screen, double posX, double posY, int spr[8][8]) 
 {
-	for (int x = 0; x < 8; x++)
+	for (int x = 0; x < 80; x++)
 	{
 
-		for (int y = 0; y < 8; y++)
+		for (int y = 0; y < 80; y++)
 		{
-			screen[((int)posY + y)* w + ((int)posX + x)].Attributes = spr[y][x] * 16;
+			if ((double(x) / 10 < 8 && double(y) / 10 < 8))
+			{
+				screen[((int)posY + y)* w + ((int)posX + x)].Attributes = spr[y / 10][x / 10] * 16;
+
+			}
 			
 
 		}
@@ -133,7 +306,7 @@ void draw_battle(CHAR_INFO *screen, int selection)
 		{
 
 			//draw monster (it will just be a square for now)
-			if (x > 675 && x < 825 && y > 10 && y < 140)
+			if (x > 675 && x < 825 && y > 10 && y < 100)
 			{
 				screen[y*w + x].Attributes = 15 * 16;
 			}
@@ -155,6 +328,8 @@ void draw_battle(CHAR_INFO *screen, int selection)
 			}
 		}
 	}
+	
+	
 }
 
 //puts everything drawn to "Screen" on the screen
@@ -191,7 +366,9 @@ void gameloop()
 		{
 			//draw things
 			draw_backgound(screen);
-			draw_sprite(screen, posX, posY, MockGuy);
+			posX = p.getX();
+			posY = p.getY();
+			draw_sprite(screen, posX, posY, p.sprite );
 
 
 
@@ -201,26 +378,11 @@ void gameloop()
 			std::chrono::duration<float> elapsed = time - oldtime;
 			float frametime = elapsed.count();
 
-			//movement
-			if (GetAsyncKeyState((unsigned short) 'W') & 0x8000)
-			{
-				posY -= 20.0*frametime;
-			}
-			if (GetAsyncKeyState((unsigned short) 'S') & 0x8000)
-			{
-				posY += 20.0*frametime;
-			}
-			if (GetAsyncKeyState((unsigned short) 'A') & 0x8000)
-			{
-				posX -= 20.0*frametime;
-			}
-			if (GetAsyncKeyState((unsigned short) 'D') & 0x8000)
-			{
-				posX += 20.0*frametime;
-			}
+			p.move(frametime);
+			
 
 			//changes gamestate to combat
-			if (posX >= 100)
+			if (posX >= 300)
 			{
 				gamestate = 1;
 			}
@@ -257,6 +419,30 @@ void gameloop()
 					select--;
 				}
 				btnCooldown = 5;
+			}
+			if ((GetAsyncKeyState((unsigned short) 'Z') & 0x8000) && btnCooldown == 0)
+			{
+				btnCooldown = 5;	//can take out later when other things happen after your turn
+
+
+				switch (select)
+				{
+				case 0:
+					ifFight(0, 0, screen);
+					break;
+				case 1:
+
+					break;
+				case 2:
+
+					break;
+				case 3:
+					
+					ifMercy(0, 0);
+					initOverworld(screen);
+					enemyHealth = 50;
+					break;
+				}
 			}
 		}
 		
