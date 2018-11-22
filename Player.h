@@ -10,6 +10,7 @@ public:
 	//member functions
 	Player(double posX, double posY);
 	void move(float frametime);
+	void invertedMove(float frametime);
 	double getX();
 	void setX(double x);
 	void setY(double y);

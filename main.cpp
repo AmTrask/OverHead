@@ -2,118 +2,14 @@
 Joshua Trask
 a prototype for a ray caster in console
 */
-#include <iostream>
-#include <Windows.h>
-#include <chrono>
-#include <cmath>
-#include <random>
-#include "Player.h"
-#include "Enemy.h"
-#define LOG(x) std::cout << x << std::endl; //Defines simply to save myself some time
-#define FIVE for (int x = 0; x < 5; x++)
 
-//global variables
-const short w = 1500;
-const short h = 400;
-int gamestate = 0; //0 = overworld, 1 = initcombat, 2 = combat
-Player p(1, 1);
-Enemy e;
-void ifFight(int*, int*);
-void ifMercy(int*, int*);
-void ifItem(int*, int*, int*);
-void ifAct(int*);
+#include "Include and globals.h" 
 
-int backgound[h][w] = { {} };
-
-//placeholder variables (these should not be in the final program
 
 //pls forgive D:
 
+//NO!!!! >:(
 
-
-
-
-void ifMercy(int* tillMercyPoint, int* runChance)
-{
-	p.setX(1);
-	gamestate = 0;
-
-	//char input;
-	//LOG("Do You Want To Spare Or Run?");
-	//LOG("s - Spare : r - Run");
-	//std::cin >> input;
-	//if (input == 's')
-	//{
-	//	FIVE //Runs through the five numbers to check if the spare is possible
-	//	{
-	//		if (tillMercyPoint[x] != 0) //0's represent spare ready
-	//		{
-	//			return false; //Will return false if not spare ready
-	//		}
-	//	}
-	//	return true; //Returns true if spare ready
-	//}
-	//else if (input == 'r')
-	//{
-	//	std::mt19937 rng;
-	//	rng.seed(std::random_device()());
-	//	std::uniform_int_distribution<std::mt19937::result_type> random(1, *runChance);
-	//	int didRun = random(rng);
-	//	if (didRun == 1)
-	//	{
-	//		LOG("You Ran Coward!");
-	//		return true;
-	//	}
-	//	else
-	//	{
-	//		LOG("YOU FAILED TO RUN MWAHAHAHAHAHA!");
-	//		return false;
-	//	}
-	//}
-}
-
-void ifAct(int* tillMercyPoint)
-{
-	e.lowerMercyPoints();
-}
-
-void ifFight(int* enemyHealthBar, int* playerDamageStrengthPoint, CHAR_INFO *screen)
-{
-
-	//*enemyHealthBar -= *playerDamageStrengthPoint; //Reduces the current enemy's health by the current player damage
-	//draw over player health bar
-	if (p.getHP() > 0)
-	{
-		p.takeDmg(e.dealDamage());
-		if (p.getHP() < 0)
-		{
-			p.setHP();
-		}
-
-		for (int i = 100; i > p.getHP(); i--)
-		{
-			for (int j = 0; j < 15; j++)
-			{
-				screen[(j + 290) * w + i + 700].Attributes = 4 * 16;
-			}
-		}
-	}
-	if (e.getHP() > 0)
-	{
-		e.takeDamage(p.getAttack());
-		if (e.getHP() < 0)
-		{
-			e.setHP(0);
-		}
-		for (int i = 50; i > e.getHP(); i--)
-		{
-			for (int j = 0; j < 5; j++)
-			{
-				screen[(j + 120) * w + i + 724].Attributes = 4 * 16;
-			}
-		}
-	}
-}
 
 void ifItem(int* itemsPoint, int* playerHealthPoint, int* playerDamageStrengthPoint)
 {
@@ -149,6 +45,222 @@ void ifItem(int* itemsPoint, int* playerHealthPoint, int* playerDamageStrengthPo
 	}
 }
 
+//Spares if valid
+void ifMercy(int* tillMercyPoint, int* runChance)
+{
+	p.setX(1);
+	gamestate = 0;
+	e.setMercyPoints(4);
+	//char input;
+	//LOG("Do You Want To Spare Or Run?");
+	//LOG("s - Spare : r - Run");
+	//std::cin >> input;
+	//if (input == 's')
+	//{
+	//	FIVE //Runs through the five numbers to check if the spare is possible
+	//	{
+	//		if (tillMercyPoint[x] != 0) //0's represent spare ready
+	//		{
+	//			return false; //Will return false if not spare ready
+	//		}
+	//	}
+	//	return true; //Returns true if spare ready
+	//}
+	//else if (input == 'r')
+	//{
+	//	std::mt19937 rng;
+	//	rng.seed(std::random_device()());
+	//	std::uniform_int_distribution<std::mt19937::result_type> random(1, *runChance);
+	//	int didRun = random(rng);
+	//	if (didRun == 1)
+	//	{
+	//		LOG("You Ran Coward!");
+	//		return true;
+	//	}
+	//	else
+	//	{
+	//		LOG("YOU FAILED TO RUN MWAHAHAHAHAHA!");
+	//		return false;
+	//	}
+	//}
+}
+
+//Lowers points to allow a mercy
+void ifAct(int* tillMercyPoint)
+{
+	e.lowerMercyPoints();
+}
+
+//Does the fight thigny
+void ifFight(int* enemyHealthBar, int* playerDamageStrengthPoint, CHAR_INFO *screen)
+{
+	fightBox(screen);
+	
+	//draw over player health bar
+	if (p.getHP() > 0)
+	{
+		p.takeDmg(e.dealDamage());
+		if (p.getHP() < 0)
+		{
+			p.setHP();
+		}
+
+		for (int i = 100; i > p.getHP(); i--)
+		{
+			for (int j = 0; j < 15; j++)
+			{
+				screen[(j + 290) * w + i + 700].Attributes = 4 * 16;
+			}
+		}
+	}
+}
+
+//draws ovals
+void drawOval(int posY, int posX, int radius, int thinkness, float xModify, float yModify, int modThinkX, int modThinkY, int color, CHAR_INFO *screen)
+{
+	int theta = 0; //The current angle that it's on
+	//int posY = 210; //position of oval's center 
+	//int posX = 750;
+	//int r = 200; //The radius of the circle
+	//int thinkness = 4;
+	int step = 1; // amount to add to theta each time 
+	for (; theta <= 360; theta += step)
+	{
+		int j = posY + radius * cos(theta) * xModify; //Y's position to print 
+		int i = posX + radius * sin(theta) * yModify; //y's position to print
+		screen[(j)* w + i].Attributes = 7 * 16; //Prints the color on screen
+		if (radius == 625) //This is not an exact thing, not even close I just put a number and it worked for what I needed it to do
+		{
+			for (int x(0); x < thinkness + modThinkY; x++)
+			{
+				for (int y(0); y < thinkness + modThinkX; y++) {
+					screen[(j + x)* w + i + y].Attributes = color * 16;
+				}
+			}
+		}
+		else
+		{
+			for (int x(0); x < thinkness; x++) //Adds thinkness to solve broken oval (first for loop controls the upper and lower lines thinkness while seccond controls the sides)
+			{
+				for (int y(0); y < thinkness; y++) {
+					screen[(j + x)* w + i + y].Attributes = color * 16;
+				}
+			}
+		}
+	}
+}
+
+//drays the graphics for the damage box
+void fightBox(CHAR_INFO *screen)
+{
+	//Makes box thicker
+	for (int i(1301), u(6); i > 0; i--, u--)
+	{
+		if (u > 0) {
+			for (int j = 0; j < 130; j++)
+			{
+				screen[(j + 148) * w + u + 100].Attributes = 15 * 16;
+				screen[(j + 148) * w + u + 1396].Attributes = 15 * 16;
+			}
+		}
+		for (int j = 0; j < 3; j++)
+		{
+			screen[(j + 275) * w + i + 99].Attributes = 15 * 16;
+			screen[(j + 148) * w + i + 99].Attributes = 15 * 16;
+		}
+	}
+	for (int u(20); u > 0; u--) //Draws red bars
+	{
+		if (u > 0)
+		{
+			for (int j(53); j > 0; j--)
+			{
+				screen[(j + 183) * w + u + 200].Attributes = 4 * 16;
+				screen[(j + 183) * w + u + 1300].Attributes = 4 * 16;
+			}
+		}
+	}
+	for (int u(20); u > 0; u--) //Draws yellow bars
+	{
+		if (u > 0)
+		{
+			for (int j(103); j > 0; j--)
+			{
+				screen[(j + 157) * w + u + 500].Attributes = 6 * 16;
+				screen[(j + 157) * w + u + 1000].Attributes = 6 * 16;
+			}
+		}
+	}
+	for (int u(20); u > 0; u--) //Draws green bars
+	{
+		if (u > 0)
+		{
+			for (int j(112); j > 0; j--)
+			{
+				screen[(j + 154) * w + u + 800].Attributes = 10 * 16;
+				screen[(j + 154) * w + u + 700].Attributes = 10 * 16;
+			}
+		}
+	}
+	for (int u(20); u > 0; u--) //Draws shiny green bars
+	{
+		if (u > 0)
+		{
+			for (int j(112); j > 0; j--)
+			{
+				screen[(j + 154) * w + u + 780].Attributes = 2 * 16;
+				screen[(j + 154) * w + u + 720].Attributes = 2 * 16;
+			}
+		}
+	}
+	for (int u(80); u > 0; u--) //Draws shiny green bars cont
+	{
+		if (u > 0)
+		{
+			for (int j(10); j > 0; j--)
+			{
+				screen[(j + 256) * w + u + 720].Attributes = 2 * 16;
+				screen[(j + 154) * w + u + 720].Attributes = 2 * 16;
+			}
+		}
+	}
+
+	//Ovals in fight sequence
+	drawOval(210, 750, 625, 10, 0.09, 1, 8, (-8), 10, screen);
+}
+
+//Updates the hp bar
+void drawEnemyDmg(CHAR_INFO *screen) 
+{
+	if (e.getHP() > 0)
+	{
+		//e.takeDamage(p.getAttack());
+		if (e.getHP() < 0)
+		{
+			e.setHP(0);
+		}
+		//int moveRight = e.getHP() - e.getMissingHP();
+		for (int i = e.getHP() + e.getMissingHP(); i > e.getHP(); i--)
+		{
+			for (int j = 0; j < 5; j++)
+			{
+				screen[(j + 120) * w + i + 724].Attributes = 4 * 16;
+			}
+		}
+	}
+	else
+	{
+		for (int i = e.getHP() + e.getMissingHP(); i > 0; i--)
+		{
+			for (int j = 0; j < 5; j++)
+			{
+				screen[(j + 120) * w + i + 724].Attributes = 4 * 16;
+			}
+		}
+	}
+}
+
+//the overworld
 void initOverworld(CHAR_INFO *screen)
 {
 	for (int i = 0; i < h; i++)
@@ -160,6 +272,7 @@ void initOverworld(CHAR_INFO *screen)
 	}
 }
 
+//draws the battle screen for the bullet hell
 void initBattleSreen(CHAR_INFO *screen)
 {
 	static int battle[h][w];
@@ -207,11 +320,6 @@ void initBattleSreen(CHAR_INFO *screen)
 					backgound[y + 330][x + (365 * i) + 125] = graphic[y / 10][x / 10] * 8 * 16;
 				}
 			}
-
-
-
-
-
 		}
 
 	}
@@ -245,16 +353,58 @@ void initBattleSreen(CHAR_INFO *screen)
 		}
 	}
 	//draw enemy health bar
-	for (int i = 0; i < e.getHP(); i++)
+	for (int i = 0; i < e.getHP() + e.getMissingHP(); i++)
 	{
 		for (int j = 0; j < 5; j++)
 		{
 			screen[(j + 120) * w + i + 725].Attributes = 10 * 16;
 		}
 	}
-
-
 }
+
+//draws the background for the bullet hell section
+void initEnemyBattle(CHAR_INFO *screen)
+{
+	for (int x = 0; x < w; x++)
+	{
+
+		for (int y = 125; y + 123 < h; y++)
+		{
+			screen[y * w + x].Attributes = 0 * 16;
+		}
+	}
+	for (int j(0); j < 3; j++)
+	{
+		for (int i(0); i < 800; i++)
+		{
+			screen[(j + 140) * w + i + 350].Attributes = 15 * 16;
+			screen[(j + 272) * w + i + 350].Attributes = 15 * 16;
+		}
+	}
+	for (int j(0); j < 135; j++)
+	{
+		for (int i(0); i < 4; i++)
+		{
+			screen[(j + 140) * w + i + 350].Attributes = 15 * 16;
+			screen[(j + 140) * w + i + 1150].Attributes = 15 * 16;
+		}
+	}
+}
+
+//resets the background for the bullet hell section
+void drawBackground(CHAR_INFO *screen)
+{
+	for (int x = 0; x < 796; x++)
+	{
+
+		for (int y = 129; y > 0; y--)
+		{
+			screen[(y + 142) * w + x + 354].Attributes = 0 * 16;
+		}
+	}
+	
+}
+
 //draws sprite to the screen.
 void draw_sprite(CHAR_INFO *screen, double posX, double posY, int spr[8][8])
 {
@@ -273,6 +423,77 @@ void draw_sprite(CHAR_INFO *screen, double posX, double posY, int spr[8][8])
 		}
 	}
 }
+
+//draws the heart
+void drawHeart(CHAR_INFO *screen, double posX, double posY)
+{
+	for (int j(0); j < 2; j++)
+	{
+		for (int i(0); i < 8; i++)
+		{
+			screen[(j + int(posX)) * w + i + int(posY)].Attributes = 4 * 16;
+		}
+	}
+	for (int j(0); j < 2; j++)
+	{
+		for (int i(0); i < 16; i++)
+		{
+			screen[(j + int(posX) + (-2)) * w + i + int(posY) - 4].Attributes = 4 * 16;
+		}
+	}
+	for (int j(0); j < 2; j++)
+	{
+		for (int i(0); i < 24; i++)
+		{
+			screen[(j + int(posX) + -4) * w + i + int(posY) - 8].Attributes = 4 * 16;
+		}
+	}
+	for (int j(0); j < 2; j++)
+	{
+		for (int i(0); i < 32; i++)
+		{
+			screen[(j + int(posX) + -6) * w + i + int(posY) - 12].Attributes = 4 * 16;
+			screen[(j + int(posX) + -8) * w + i + int(posY) - 12].Attributes = 4 * 16;
+		}
+	}
+	for (int j(0); j < 2; j++)
+	{
+		for (int i(0); i < 14; i++)
+		{
+			screen[(j + int(posX) + -10) * w + i + int(posY) - 12].Attributes = 4 * 16;
+			screen[(j + int(posX) + -10) * w + i + int(posY) + 6].Attributes = 4 * 16;
+
+		}
+	}
+	for (int j(0); j < 1; j++)
+	{
+		for (int i(0); i < 9; i++)
+		{
+			screen[(j + int(posX) + -11) * w + i + int(posY) - 10].Attributes = 4 * 16;
+			screen[(j + int(posX) + -11) * w + i + int(posY) + 9].Attributes = 4 * 16;
+
+		}
+	}
+	for (int j(0); j < 1; j++)
+	{
+		for (int i(0); i < 3; i++)
+		{
+			screen[(j + int(posX) + -12) * w + i + int(posY) - 8].Attributes = 4 * 16;
+			screen[(j + int(posX) + -12) * w + i + int(posY) + 13].Attributes = 4 * 16;
+
+		}
+	}
+	//Dimension box findings and possible hitbox?
+	for (int j(0); j < 14; j++) {
+		for (int i(0); i < 32; i++) {
+			screen[int(posX - j + 1) * w + int(posY - 12)].Attributes = 7 * 16; // 1 vertival to get to the bottom
+			screen[int(posX - j + 1) * w + int(posY + 20)].Attributes = 7 * 16; // 20 right to get to right side
+			screen[int(posX + 1) * w + int(posY + i - 12)].Attributes = 7 * 16; // 12 left to get to left side
+			screen[int(posX - 12) * w + int(posY + i - 12)].Attributes = 7 * 16; // 12 up to get to top
+		}
+	}
+}
+
 //draws the backgound
 void draw_backgound(CHAR_INFO *screen)
 {
@@ -330,8 +551,8 @@ void printScreen(HANDLE hconsole, CHAR_INFO *screen, SMALL_RECT c)
 	screen[w*h - 1].Char.AsciiChar = '\0';
 	WriteConsoleOutput(hconsole, screen, { w,h }, { 0,0 }, &c);
 }
-//main gameloop
 
+//main gameloop
 void gameloop()
 {
 
@@ -354,6 +575,11 @@ void gameloop()
 	//just an infinite loop, should probably make it not infinite
 	while (true)
 	{
+		oldtime = time;
+		time = std::chrono::system_clock::now();
+		std::chrono::duration<float> elapsed = time - oldtime;
+		float frametime = elapsed.count();
+
 		if (gamestate == 0)
 		{
 			//draw things
@@ -364,11 +590,6 @@ void gameloop()
 
 
 
-
-			oldtime = time;
-			time = std::chrono::system_clock::now();
-			std::chrono::duration<float> elapsed = time - oldtime;
-			float frametime = elapsed.count();
 
 			p.move(frametime);
 
@@ -381,11 +602,14 @@ void gameloop()
 		}
 		else if (gamestate == 1)
 		{
+			e.setNapstablook();
 			//changes background to battle screen
 			initBattleSreen(screen);
 			gamestate = 2;
+			s.setState(0);
+
 		}
-		else
+		else if (gamestate == 2)
 		{
 			static int btnCooldown = 0;
 			//main battle loop	
@@ -394,51 +618,115 @@ void gameloop()
 				btnCooldown--;
 			}
 			draw_battle(screen, select);
-			if (GetAsyncKeyState((unsigned short) 'A') & 0x8000 && btnCooldown == 0)
+			if (s.isMain())
 			{
-				select--;
-				if (select < 0)
-				{
-					select++;
-				}
-				btnCooldown = 5;
-			}
-			if (GetAsyncKeyState((unsigned short) 'D') & 0x8000 && btnCooldown == 0)
-			{
-				select++;
-				if (select >= 4)
+				if (GetAsyncKeyState((unsigned short) 'A') & 0x8000 && btnCooldown == 0)
 				{
 					select--;
-				}
-				btnCooldown = 5;
-			}
-			if ((GetAsyncKeyState((unsigned short) 'Z') & 0x8000) && btnCooldown == 0)
-			{
-				btnCooldown = 5;	//can take out later when other things happen after your turn
-
-
-				switch (select)
-				{
-				case 0:
-					ifFight(0, 0, screen);
-					break;
-				case 1:
-					ifAct(0);
-					break;
-				case 2:
-
-					break;
-				case 3:
-					if (e.getMercyPoints() == 0)
+					if (select < 0)
 					{
-						ifMercy(0, 0);
-						initOverworld(screen);
-						e.setHP(50);
+						select++;
 					}
-					break;
+					btnCooldown = 5;
 				}
+				if (GetAsyncKeyState((unsigned short) 'D') & 0x8000 && btnCooldown == 0)
+				{
+					select++;
+					if (select >= 4)
+					{
+						select--;
+					}
+					btnCooldown = 5;
+				}
+				if ((GetAsyncKeyState((unsigned short) 'Z') & 0x8000) && btnCooldown == 0)
+				{
+					btnCooldown = 2;	//can take out later when other things happen after your turn
+
+
+					switch (select)
+					{
+					case 0:
+						ifFight(0, 0, screen);
+						s.setState(1);
+						break;
+					case 1:
+						ifAct(0);
+						break;
+					case 2:
+
+						break;
+					case 3:
+						if (e.getMercyPoints() == 0)
+						{
+							ifMercy(0, 0);
+							initOverworld(screen);
+							e.setHP(50);
+						}
+						break;
+					}
+				}
+			}
+			else if (s.isAttack())
+			{
+				if ((GetAsyncKeyState((unsigned short) 'Z') & 0x8000) && btnCooldown == 0)
+				{
+					btnCooldown = 5;
+					s.setState(0);
+					e.takeDamage(int(a.determineDamage() * p.getAttack()));
+					a.reset();
+					initBattleSreen(screen);
+					draw_battle(screen, select);
+					drawEnemyDmg(screen);
+					gamestate = 3;
+				}
+				else if (!a.isDone())
+				{
+					initBattleSreen(screen);
+					draw_battle(screen, select);
+					drawEnemyDmg(screen);
+					fightBox(screen);
+					a.move(frametime);
+					a.drawAttackBar(screen, w);
+				}
+				else
+				{
+					s.setState(0);
+					a.reset();
+					btnCooldown = 5;
+					initBattleSreen(screen);
+					draw_battle(screen, select);
+					drawEnemyDmg(screen);
+					gamestate = 3;
+				}
+			}
+
+		}
+		else if (gamestate == 3) 
+		{
+			initEnemyBattle(screen);
+			gamestate = 4;
+		}
+		else if (gamestate == 4)
+		{
+			static int duration = 0;
+			drawBackground(screen);
+			int pos2X = p2.getX();
+			int pos2Y = p2.getY();
+			drawHeart(screen, pos2X, pos2Y);
+			p2.invertedMove(frametime);
+			duration++;
+			if (duration >= 60)
+			{
+				gamestate = 1;
+				duration = 0;
+				initBattleSreen(screen);
+				gamestate = 2;
+				s.setState(0);
+				drawEnemyDmg(screen);
 			}
 		}
+
+
 
 		printScreen(hconsole, screen, c);
 
@@ -448,6 +736,7 @@ void gameloop()
 
 int main()
 {
+	//gamestate = 1;
 	//change font size
 	CONSOLE_FONT_INFOEX font;
 	font.cbSize = sizeof(font);
