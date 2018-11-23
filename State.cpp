@@ -9,21 +9,17 @@ bool State::isAttack()
 {
 	return currentState == 1;
 }
-bool State::isDodge()
+bool State::isAct()
 {
 	return currentState == 2;
 }
-bool State::isAct()
+bool State::isItem()
 {
 	return currentState == 3;
 }
-bool State::isItem()
-{
-	return currentState == 4;
-}
 bool State::isMercy()
 {
-	return currentState == 5;
+	return currentState == 4;
 }
 void State::setState(int toSwitchTo)
 {

@@ -95,24 +95,6 @@ void ifAct(int* tillMercyPoint)
 void ifFight(int* enemyHealthBar, int* playerDamageStrengthPoint, CHAR_INFO *screen)
 {
 	fightBox(screen);
-	
-	//draw over player health bar
-	if (p.getHP() > 0)
-	{
-		p.takeDmg(e.dealDamage());
-		if (p.getHP() < 0)
-		{
-			p.setHP();
-		}
-
-		for (int i = 100; i > p.getHP(); i--)
-		{
-			for (int j = 0; j < 15; j++)
-			{
-				screen[(j + 290) * w + i + 700].Attributes = 4 * 16;
-			}
-		}
-	}
 }
 
 //draws ovals
@@ -143,7 +125,42 @@ void drawOval(int posY, int posX, int radius, int thinkness, float xModify, floa
 			for (int x(0); x < thinkness; x++) //Adds thinkness to solve broken oval (first for loop controls the upper and lower lines thinkness while seccond controls the sides)
 			{
 				for (int y(0); y < thinkness; y++) {
+					screen[((j + x)* w + i + y)].Attributes = color * 16;
+				}
+			}
+		}
+	}
+}
+
+void drawOvalForBullets(int posY, int posX, int radius, int thinkness, float xModify, float yModify, int modThinkX, int modThinkY, int color, CHAR_INFO *screen, int bulletIdentification, int &invincible)
+{
+	int theta = 0; //The current angle that it's on
+	//int posY = 210; //position of oval's center 
+	//int posX = 750;
+	//int r = 200; //The radius of the circle
+	//int thinkness = 4;
+	int step = 1; // amount to add to theta each time 
+	for (; theta <= 360; theta += step)
+	{
+		int j = posY + radius * cos(theta) * xModify; //Y's position to print 
+		int i = posX + radius * sin(theta) * yModify; //y's position to print
+		screen[(j)* w + i].Attributes = 7 * 16; //Prints the color on screen
+		if (radius == 625) //This is not an exact thing, not even close I just put a number and it worked for what I needed it to do
+		{
+			for (int x(0); x < thinkness + modThinkY; x++)
+			{
+				for (int y(0); y < thinkness + modThinkX; y++) {
 					screen[(j + x)* w + i + y].Attributes = color * 16;
+				}
+			}
+		}
+		else
+		{
+			for (int x(0); x < thinkness; x++) //Adds thinkness to solve broken oval (first for loop controls the upper and lower lines thinkness while seccond controls the sides)
+			{
+				for (int y(0); y < thinkness; y++) {
+					checkHitAndDealDmg(screen, bulletIdentification, ((j + x)* w + i + y), invincible);
+					screen[((j + x)* w + i + y)].Attributes = color * 16;
 				}
 			}
 		}
@@ -394,6 +411,22 @@ void initEnemyBattle(CHAR_INFO *screen)
 //resets the background for the bullet hell section
 void drawBackground(CHAR_INFO *screen)
 {
+	for (int j(0); j < 3; j++)
+	{
+		for (int i(0); i < 800; i++)
+		{
+			screen[(j + 140) * w + i + 350].Attributes = 15 * 16;
+			screen[(j + 272) * w + i + 350].Attributes = 15 * 16;
+		}
+	}
+	for (int j(0); j < 135; j++)
+	{
+		for (int i(0); i < 4; i++)
+		{
+			screen[(j + 140) * w + i + 350].Attributes = 15 * 16;
+			screen[(j + 140) * w + i + 1150].Attributes = 15 * 16;
+		}
+	}
 	for (int x = 0; x < 796; x++)
 	{
 
@@ -484,13 +517,72 @@ void drawHeart(CHAR_INFO *screen, double posX, double posY)
 		}
 	}
 	//Dimension box findings and possible hitbox?
-	for (int j(0); j < 14; j++) {
+	/*for (int j(0); j < 14; j++) {
 		for (int i(0); i < 32; i++) {
 			screen[int(posX - j + 1) * w + int(posY - 12)].Attributes = 7 * 16; // 1 vertival to get to the bottom
 			screen[int(posX - j + 1) * w + int(posY + 20)].Attributes = 7 * 16; // 20 right to get to right side
 			screen[int(posX + 1) * w + int(posY + i - 12)].Attributes = 7 * 16; // 12 left to get to left side
 			screen[int(posX - 12) * w + int(posY + i - 12)].Attributes = 7 * 16; // 12 up to get to top
 		}
+	}*/
+}
+
+//Checks for hitbox
+void checkHitAndDealDmg(CHAR_INFO *screen, int bulletIdentification, int posToCheck, int &invincible)
+{
+
+	if (invincible != 0)
+	{
+		return;
+	}
+	else if (screen[posToCheck].Attributes == 4 * 16)
+	{
+		invincible = 10;
+		//draw over player health bar
+		if (p.getHP() > 0)
+		{
+			p.takeDmg(e.dealDamage());
+			if (p.getHP() < 0)
+			{
+				p.setHP();
+			}
+
+			for (int i = 100; i > p.getHP(); i--)
+			{
+				for (int j = 0; j < 15; j++)
+				{
+					screen[(j + 290) * w + i + 700].Attributes = 4 * 16;
+				}
+			}
+		}
+		return;
+	}
+	else
+	{
+		return;
+	}
+}
+
+//draws the bullets
+void drawBullets(double posX, double posY, int bulletIdentification, CHAR_INFO *screen, int &invincible)
+{
+	//for (int j(0); j < 4; j++)
+	//{
+		//for (int i(0); i < 6; i++)
+		//{
+			//checkHitAndDealDmg(screen, bulletIdentification, ((j + int(posY)) * w + i + int(posX)), invincible);
+			//screen[(j + int(posY)) * w + i + int(posX)].Attributes = 6 * 16;
+		//}
+	//}
+	drawOvalForBullets(posY, posX, 2, 2, 2, 1, 2, 1, 8, screen, bulletIdentification, invincible);
+}
+
+void drawAndMoveBullets(float frametime, CHAR_INFO *screen, int bulletIdentification, int patternToUse, double initPosX, double initPosY, int &invincible)
+{
+	b[bulletIdentification].moveBullet(patternToUse, frametime);
+	if (b[bulletIdentification].legalBullet(4, 4, 0, 0))
+	{
+		drawBullets(b[bulletIdentification].getX(), b[bulletIdentification].getY(), bulletIdentification, screen, invincible);
 	}
 }
 
@@ -651,9 +743,10 @@ void gameloop()
 						break;
 					case 1:
 						ifAct(0);
+						gamestate = 3;
 						break;
 					case 2:
-
+						gamestate = 3;
 						break;
 					case 3:
 						if (e.getMercyPoints() == 0)
@@ -661,6 +754,10 @@ void gameloop()
 							ifMercy(0, 0);
 							initOverworld(screen);
 							e.setHP(50);
+						}
+						else
+						{
+							gamestate = 3;
 						}
 						break;
 					}
@@ -678,6 +775,10 @@ void gameloop()
 					draw_battle(screen, select);
 					drawEnemyDmg(screen);
 					gamestate = 3;
+					if (e.getHP() == 0) 
+					{
+						gamestate = 5;
+					}
 				}
 				else if (!a.isDone())
 				{
@@ -708,25 +809,112 @@ void gameloop()
 		}
 		else if (gamestate == 4)
 		{
+			static int legalBullets = 0;
+			static int invincible = 0;
 			static int duration = 0;
+			static int toMove[999] = { 0 };
 			drawBackground(screen);
 			int pos2X = p2.getX();
 			int pos2Y = p2.getY();
-			drawHeart(screen, pos2X, pos2Y);
+			//Works invincibility and "animation" for it
+			if (invincible > 0)
+			{
+				invincible--;
+				if (invincible % 2 == 0)
+				{
+					drawHeart(screen, pos2X, pos2Y);
+				}
+			}
+			else
+			{
+				drawHeart(screen, pos2X, pos2Y);
+			}
+			
+			
+			
+			
 			p2.invertedMove(frametime);
+
+			
+
+			if (duration % 2 == 1)
+			{
+				b[legalBullets].setXY(750, 180);
+				b[legalBullets].setGoal(p2.getX(), p2.getY());
+				b[legalBullets].calculateSpeed(15);
+				legalBullets++;
+			}
+			if ((duration + 1) % 2 == 1)
+			{
+				b[legalBullets].setXY(600, 180);
+				b[legalBullets].setGoal(p2.getX() + 30, p2.getY() - 30);
+				b[legalBullets].calculateSpeed(15);
+				legalBullets++;
+			}
+			if ((duration + 300) % 2 == 1)
+			{
+				b[legalBullets].setXY(850, 220);
+				b[legalBullets].setGoal(p2.getX() - 30, p2.getY() + 30);
+				b[legalBullets].calculateSpeed(15);
+				legalBullets++;
+			}
+
+
+
+			if (duration >= 1)
+			{
+				for (int x = 0; x < legalBullets; x++)
+				{
+					if (b[x].legalBullet(4, 4, 7, 10))
+					{
+						drawAndMoveBullets(frametime, screen, x, 0, 1, 1, invincible);
+					}
+				}
+			}
+
+
+
+
 			duration++;
-			if (duration >= 60)
+			if (p.getHP() == 0)
+			{
+				gamestate = 6;
+			}
+			if (duration >= 130 && gamestate != 6)
 			{
 				gamestate = 1;
 				duration = 0;
+				legalBullets = 0;
 				initBattleSreen(screen);
 				gamestate = 2;
 				s.setState(0);
 				drawEnemyDmg(screen);
+				p2.reset();
+
 			}
 		}
-
-
+		else if (gamestate == 5) 
+		{
+			static int WHY = 1;
+			if (WHY > 0)
+			{
+				initBattleSreen(screen);
+				drawEnemyDmg(screen);
+				WHY--;
+			}
+			else if (WHY == 0)
+			{
+				Sleep(2000); //Uses milliseconds
+				gamestate = 0;
+				initOverworld(screen);
+				p.setX(0);
+				WHY = 1;
+			}
+		}
+		else if (gamestate == 6)
+		{
+			;
+		}
 
 		printScreen(hconsole, screen, c);
 

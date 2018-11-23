@@ -20,6 +20,7 @@ public:
 	int getAttack();
 	void setAttack(int buff);
 	void takeDmg(int damage);
+	void reset();
 
 	//please put sprite in a different file or something
 	int sprite[8][8] = {

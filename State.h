@@ -6,7 +6,6 @@ class State
 public:
 	bool isMain();
 	bool isAttack();
-	bool isDodge();
 	bool isAct();
 	bool isItem();
 	bool isMercy();

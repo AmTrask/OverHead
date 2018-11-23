@@ -107,3 +107,8 @@ double Player::getY()
 {
 	return pY;
 }
+void Player::reset()
+{
+	pX = 220;
+	pY = 750;
+}
