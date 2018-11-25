@@ -9,6 +9,8 @@
 #include "State.h"
 #include "AttackSequence.h"
 #include "BulletPaterns.h"
+#include "sprites.h"
+#include "maps.h"
 #define LOG(x) std::cout << x << std::endl; //Defines simply to save myself some time
 #define FIVE for (int x = 0; x < 5; x++)
 
@@ -37,6 +39,7 @@ void drawHeart(CHAR_INFO *screen, double posX, double posY);
 void checkHitAndDealDmg(CHAR_INFO *screen, int bulletIdentification, int posToCheck, int &invincible);
 void drawBullets(double posX, double posY, int bulletIdentification, CHAR_INFO *screen, int &invincible);
 void drawAndMoveBullets(float frametime, CHAR_INFO *screen, int bulletIdentification, int patternToUse, double initPosX, double initPosY, int &invincible);
+
 void draw_backgound(CHAR_INFO *screen);
 void draw_battle(CHAR_INFO *screen, int selection);
 void printScreen(HANDLE hconsole, CHAR_INFO *screen, SMALL_RECT c);
@@ -47,7 +50,7 @@ void gameloop();
 
 
 int gamestate = 0; //0 = overworld, 1 = initcombat, 2 = combat, 3 = init enemy attack phase, 4 = enemy attack phase //5 = enemy kill //6 = gameover
-Player p(1, 1);
+Player p(800, 200);
 Player p2(220, 750); //X and Y are backwards for this one HURRAY!!!
 Enemy e;
 State s;

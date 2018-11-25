@@ -1,14 +1,12 @@
-/*
-Joshua Trask
-a prototype for a ray caster in console
-*/
+
 
 #include "Include and globals.h" 
 
+#include "sprites.h"
 
 //pls forgive D:
 
-//NO!!!! >:(
+int dir = 0;
 
 
 void ifItem(int* itemsPoint, int* playerHealthPoint, int* playerDamageStrengthPoint)
@@ -279,7 +277,31 @@ void drawEnemyDmg(CHAR_INFO *screen)
 
 //the overworld
 void initOverworld(CHAR_INFO *screen)
+{/*
+	for (int i = 0; i < h; i++)
+	{
+		for (int j = 0; j < w; j++)
+		{
+			backgound[i][j] = 0;
+		}
+	}*/
+
+	//candy room
+	for (int y = 0; y < h; y++)
+	{
+		for (int x = 0; x < w; x++)
+		{
+			backgound[y][x] = candyRoom[int(y / 5.715)][int(x / 9.678)] * 16;
+		}
+	}
+
+}
+
+//draws the battle screen for the bullet hell
+void initBattleSreen(CHAR_INFO *screen)
 {
+	//clears screen
+	
 	for (int i = 0; i < h; i++)
 	{
 		for (int j = 0; j < w; j++)
@@ -287,11 +309,6 @@ void initOverworld(CHAR_INFO *screen)
 			backgound[i][j] = 0;
 		}
 	}
-}
-
-//draws the battle screen for the bullet hell
-void initBattleSreen(CHAR_INFO *screen)
-{
 	static int battle[h][w];
 
 	int graphic[4][15] = {
@@ -439,16 +456,17 @@ void drawBackground(CHAR_INFO *screen)
 }
 
 //draws sprite to the screen.
-void draw_sprite(CHAR_INFO *screen, double posX, double posY, int spr[8][8])
+void draw_sprite(CHAR_INFO *screen, double posX, double posY, int spr[17][25])
 {
-	for (int x = 0; x < 80; x++)
+	for (int x = 0; x < 50; x++)
 	{
 
-		for (int y = 0; y < 80; y++)
+		for (int y = 0; y < 34; y++)
 		{
-			if ((double(x) / 10 < 8 && double(y) / 10 < 8))
+			
+			if ((double(x) / 2 < 50 && double(y) / 2 < 34) && (spr[y / 2][x / 2] >= 0))
 			{
-				screen[((int)posY + y)* w + ((int)posX + x)].Attributes = spr[y / 10][x / 10] * 16;
+				screen[((int)posY + y)* w + ((int)posX + x)].Attributes = spr[y/2][x/2] * 16;
 
 			}
 
@@ -664,6 +682,7 @@ void gameloop()
 	auto time = std::chrono::system_clock::now();
 	auto oldtime = std::chrono::system_clock::now();
 	double posX(1), posY(1);
+	initOverworld(screen); 
 	//just an infinite loop, should probably make it not infinite
 	while (true)
 	{
@@ -678,16 +697,16 @@ void gameloop()
 			draw_backgound(screen);
 			posX = p.getX();
 			posY = p.getY();
-			draw_sprite(screen, posX, posY, p.sprite);
+			draw_sprite(screen, posX, posY, p.sprite[dir]);
 
 
 
 
-			p.move(frametime);
+			dir = p.move(frametime, backgound);
 
 
 			//changes gamestate to combat
-			if (posX >= 300)
+			if (posY >= 350)
 			{
 				gamestate = 1;
 			}
@@ -908,6 +927,7 @@ void gameloop()
 				gamestate = 0;
 				initOverworld(screen);
 				p.setX(0);
+				p.setY(0);
 				WHY = 1;
 			}
 		}
