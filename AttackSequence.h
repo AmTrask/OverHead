@@ -1,4 +1,3 @@
-#pragma once
 #ifndef ATTACK_H
 #define ATTACK_H
 #include <Windows.h>

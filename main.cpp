@@ -1,98 +1,744 @@
 
-
 #include "Include and globals.h" 
 
-#include "sprites.h"
-
-//pls forgive D:
-
-int dir = 0;
 
 
-void ifItem(int* itemsPoint, int* playerHealthPoint, int* playerDamageStrengthPoint)
+
+
+
+//Draws the indidual letter on the screen
+void drawLetters(CHAR_INFO *screen, double posX, double posY, int modX, int modY, char letter, int color)
 {
-	LOG("What Item Do You Want To Use?");
-	LOG("1, 2, 3, 4 or 5");
-	int item;
-	std::cin >> item;
-	switch (itemsPoint[item - 1]) //Enters the value of the number of the inputed array index to check if there is an item or not
-	{
-	case 1:
-		*playerHealthPoint += 10; //Adds ten health to the player
-		itemsPoint[item - 1] = 0; //Used the item so it's no longer valid so re-use
-		return;
-	case 2:
-		*playerHealthPoint += 30; //Adds 30 health to the user
-		itemsPoint[item - 1] = 0; //Used the item so it's no longer valid so re-use
-		return;
-	case 3:
-		*playerDamageStrengthPoint += 5; //Adds 5 damage to the player
-		itemsPoint[item - 1] = 0; //Used the item so it's no longer valid so re-use
-		return;
-	case 4:
-		*playerDamageStrengthPoint += 10; //Adds 10 damage to the player
-		itemsPoint[item - 1] = 0; //Used the item so it's no longer valid so re-use
-		return;
-	case 5:
-		*playerDamageStrengthPoint -= 5; //Reduces the damage of the player by 5
-		*playerHealthPoint += 50; //Adds 50 health to the player
-		itemsPoint[item - 1] = 0; //Used the item so it's no longer valid so re-use
-		return;
-	case 0:
-		LOG("Nothing here bub"); //If the player tried using an non-existing item
+	const int DIMENTION_W = 21;
+	const int DIMENTION_H = 11;
+	static int ex[DIMENTION_H][DIMENTION_W] =
+	{ { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0 },
+	{0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0 },
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } };
+
+	//I didn't add the non capitalised letters as I do not think they are needed, if someone wants to add them remember to follow the font style: 8bitoperator
+	static int a[DIMENTION_H][DIMENTION_W];
+	static int b[DIMENTION_H][DIMENTION_W];
+	static int c[DIMENTION_H][DIMENTION_W];
+	static int d[DIMENTION_H][DIMENTION_W];
+	static int e[DIMENTION_H][DIMENTION_W];
+	static int f[DIMENTION_H][DIMENTION_W];
+	static int g[DIMENTION_H][DIMENTION_W];
+	static int h[DIMENTION_H][DIMENTION_W];
+	static int i[DIMENTION_H][DIMENTION_W];
+	static int j[DIMENTION_H][DIMENTION_W];
+	static int k[DIMENTION_H][DIMENTION_W];
+	static int l[DIMENTION_H][DIMENTION_W];
+	static int m[DIMENTION_H][DIMENTION_W];
+	static int n[DIMENTION_H][DIMENTION_W];
+	static int o[DIMENTION_H][DIMENTION_W];
+	static int p[DIMENTION_H][DIMENTION_W];
+	static int q[DIMENTION_H][DIMENTION_W];
+	static int r[DIMENTION_H][DIMENTION_W];
+	static int s[DIMENTION_H][DIMENTION_W];
+	static int t[DIMENTION_H][DIMENTION_W];
+	static int u[DIMENTION_H][DIMENTION_W];
+	static int v[DIMENTION_H][DIMENTION_W];
+	static int wLet[DIMENTION_H][DIMENTION_W];
+	static int xLet[DIMENTION_H][DIMENTION_W];
+	static int yLet[DIMENTION_H][DIMENTION_W];
+	static int z[DIMENTION_H][DIMENTION_W];
+
+
+	static int A[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} };
+	static int B[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0} };
+	static int C[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0} };
+	static int D[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0} };
+	static int E[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} };
+	static int F[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} };
+	static int G[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0} };
+	static int H[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0} };
+	static int I[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0} };
+	static int J[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0} };
+	static int K[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0} };
+	static int L[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0} };
+	static int M[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0},
+	{0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0},
+	{0,0,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,0,0},
+	{0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0},
+	{0,0,0,1,1,1,1,0,0,1,1,0,0,1,1,1,1,0,0,0},
+	{0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0},
+	{0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0},
+	{0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0},
+	{0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0} };
+	static int N[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0} };
+	static int O[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} };
+	static int P[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0} };
+	static int Q[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0} };
+	static int R[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0} };
+	static int S[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0} };
+	static int T[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0} };
+	static int U[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0} };
+	static int V[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0} };
+	static int W[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0},
+	{0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0},
+	{0,0,0,1,1,1,1,0,0,1,1,0,0,1,1,1,1,0,0,0},
+	{0,0,0,1,1,1,1,0,0,1,1,0,0,1,1,1,1,0,0,0},
+	{0,0,0,1,1,1,1,0,0,1,1,0,0,1,1,1,1,0,0,0},
+	{0,0,0,1,1,1,1,0,0,1,1,0,0,1,1,1,1,0,0,0},
+	{0,0,0,1,1,1,1,0,0,1,1,0,0,1,1,1,1,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,1,1,1,1,0,0,0,0,0} };
+	static int X[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0},
+	{0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0},
+	{0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0},
+	{0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0},
+	{0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0} };
+	static int Y[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0} };
+	static int Z[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0} };
+	static int star[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0},
+	{0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0},
+	{0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} };
+	static int one[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0} };
+	static int two[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0} };
+	static int three[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,1,1,0,0,0,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0} };
+	static int four[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0} };
+	static int five[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0} };
+	static int six[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0} };
+	static int seven[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0} };
+	static int eight[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0} };
+	static int nine[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0} };
+	static int zero[DIMENTION_H][DIMENTION_W] =
+	{ {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,1,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0} };
+	
+#define LETTERTODRAW(toInsert) for (int x = 0; x < DIMENTION_W * modX; x++) { for (int y = 0; y < DIMENTION_H * modY; y++) { if((toInsert[y / modY][x / modX] * 16) != 0){screen[((int)posY + y)* w + ((int)posX + x)].Attributes = color * 16; } } }
+	int * ref = &ex[1][2];
+	switch (letter)
+	{ 
+	case '*':
+		LETTERTODRAW(star);
+		break;
+	case '!':
+		LETTERTODRAW(ex);
+		break;
+	case 'Z':
+		LETTERTODRAW(Z);
+		break;
+	case 'Y':
+		LETTERTODRAW(Y);
+		break;
+	case 'X':
+		LETTERTODRAW(X);
+		break;
+	case 'W':
+		LETTERTODRAW(W);
+		break;
+	case 'V':
+		LETTERTODRAW(V);
+		break;
+	case 'U':
+		LETTERTODRAW(U);
+		break;
+	case 'T':
+		LETTERTODRAW(T);
+		break;
+	case 'S':
+		LETTERTODRAW(S);
+		break;
+	case 'R':
+		LETTERTODRAW(R);
+		break;
+	case 'Q':
+		LETTERTODRAW(Q);
+		break;
+	case 'P':
+		LETTERTODRAW(P);
+		break;
+	case 'O':
+		LETTERTODRAW(O);
+		break;
+	case 'N':
+		LETTERTODRAW(N);
+		break;
+	case 'M':
+		LETTERTODRAW(M);
+		break;
+	case 'L':
+		LETTERTODRAW(L);
+		break;
+	case 'K':
+		LETTERTODRAW(K);
+		break;
+	case 'J':
+		LETTERTODRAW(J);
+		break;
+	case 'I':
+		LETTERTODRAW(I);
+		break;
+	case 'H':
+		LETTERTODRAW(H);
+		break;
+	case 'G':
+		LETTERTODRAW(G);
+		break;
+	case 'F':
+		LETTERTODRAW(F);
+		break;
+	case 'E':
+		LETTERTODRAW(E);
+		break;
+	case 'D':
+		LETTERTODRAW(D);
+		break;
+	case 'C':
+		LETTERTODRAW(C);
+		break;
+	case 'B':
+		LETTERTODRAW(B);
+		break;
+	case 'A':
+		LETTERTODRAW(A);
+		break;
+	case 'z':
+		LETTERTODRAW(z);
+		break;
+	case 'y':
+		LETTERTODRAW(yLet);
+		break;
+	case 'x':
+		LETTERTODRAW(xLet);
+		break;
+	case 'w':
+		LETTERTODRAW(wLet);
+		break;
+	case 'v':
+		LETTERTODRAW(v);
+		break;
+	case 'u':
+		LETTERTODRAW(u);
+		break;
+	case 't':
+		LETTERTODRAW(t);
+		break;
+	case 's':
+		LETTERTODRAW(s);
+		break;
+	case 'r':
+		LETTERTODRAW(r);
+		break;
+	case 'q':
+		LETTERTODRAW(q);
+		break;
+	case 'p':
+		LETTERTODRAW(p);
+		break;
+	case 'o':
+		LETTERTODRAW(o);
+		break;
+	case 'n':
+		LETTERTODRAW(n);
+		break;
+	case 'm':
+		LETTERTODRAW(m);
+		break;
+	case 'l':
+		LETTERTODRAW(l);
+		break;
+	case 'k':
+		LETTERTODRAW(k);
+		break;
+	case 'j':
+		LETTERTODRAW(j);
+		break;
+	case 'i':
+		LETTERTODRAW(i);
+		break;
+	case 'h':
+		LETTERTODRAW(h);
+		break;
+	case 'g':
+		LETTERTODRAW(g);
+		break;
+	case 'f':
+		LETTERTODRAW(f);
+		break;
+	case 'e':
+		LETTERTODRAW(e);
+		break;
+	case 'd':
+		LETTERTODRAW(d);
+		break;
+	case 'c':
+		LETTERTODRAW(c);
+		break;
+	case 'b':
+		LETTERTODRAW(b);
+		break;
+	case 'a':
+		LETTERTODRAW(a);
+		break;
+	case '0':
+		LETTERTODRAW(zero);
+		break;
+	case '9':
+		LETTERTODRAW(nine);
+		break;
+	case '8':
+		LETTERTODRAW(eight);
+		break;
+	case '7':
+		LETTERTODRAW(seven);
+		break;
+	case '6':
+		LETTERTODRAW(six);
+		break;
+	case '5':
+		LETTERTODRAW(five);
+		break;
+	case '4':
+		LETTERTODRAW(four);
+		break;
+	case '3':
+		LETTERTODRAW(three);
+		break;
+	case '2':
+		LETTERTODRAW(two);
+		break;
+	case '1':
+		LETTERTODRAW(one);
+		break;
 	}
 }
 
-//Spares if valid
-void ifMercy(int* tillMercyPoint, int* runChance)
+//Passes the letters to draw into the drawLetters function
+void drawWords(CHAR_INFO *screen, double posX, double posY, int modX, int modY, std::string wordToDraw, int color)
 {
-	p.setX(1);
-	gamestate = 0;
-	e.setMercyPoints(4);
-	//char input;
-	//LOG("Do You Want To Spare Or Run?");
-	//LOG("s - Spare : r - Run");
-	//std::cin >> input;
-	//if (input == 's')
-	//{
-	//	FIVE //Runs through the five numbers to check if the spare is possible
-	//	{
-	//		if (tillMercyPoint[x] != 0) //0's represent spare ready
-	//		{
-	//			return false; //Will return false if not spare ready
-	//		}
-	//	}
-	//	return true; //Returns true if spare ready
-	//}
-	//else if (input == 'r')
-	//{
-	//	std::mt19937 rng;
-	//	rng.seed(std::random_device()());
-	//	std::uniform_int_distribution<std::mt19937::result_type> random(1, *runChance);
-	//	int didRun = random(rng);
-	//	if (didRun == 1)
-	//	{
-	//		LOG("You Ran Coward!");
-	//		return true;
-	//	}
-	//	else
-	//	{
-	//		LOG("YOU FAILED TO RUN MWAHAHAHAHAHA!");
-	//		return false;
-	//	}
-	//}
+	double distBetwLet = 16 * modX;
+	for (int x = 0; x < size(wordToDraw); x++)
+	{
+		drawLetters(screen, posX + (distBetwLet * x), posY, modX, modY, wordToDraw[x]/*letter*/, color);
+	}
 }
 
-//Lowers points to allow a mercy
-void ifAct(int* tillMercyPoint)
+//Gets items list and prints them
+void drawItemOptions(CHAR_INFO *screen, int select)
 {
-	e.lowerMercyPoints();
+	double posWords[12] = { 190, 170, 830, 170, 190, 205, 830, 205, 190, 240, 830, 240 };
+	int color = 3;
+	
+	if (pi.getItemCount() == 0)
+	{
+		drawWords(screen, posWords[0], posWords[1], 2, 2, pi.getItemName(999), color);
+	}
+	else
+	{
+		for (int x = 0; x < pi.getItemCount(); x++)
+		{
+			if (select == x)
+			{
+				color = 3;
+			}
+			else
+			{
+				color = 8;
+			}
+			drawWords(screen, posWords[x * 2 + 0], posWords[x * 2 + 1], 2, 2, pi.getItemName(pi.getItemIdentification(x)), color);
+		}
+	}
 }
 
-//Does the fight thigny
-void ifFight(int* enemyHealthBar, int* playerDamageStrengthPoint, CHAR_INFO *screen)
+//Displays the mercy options
+void drawMercyOptions(CHAR_INFO *screen, int select)
 {
-	fightBox(screen);
+	double posWords[12] = { 190, 170, 830, 170, 190, 205, 830, 205, 190, 240, 830, 240 };
+	std::string word[2] = { "*SPARE", "*RUN" };
+	int color = 3;
+	for (int x = 0; x < 2; x++)
+	{
+		if (select == x)
+		{
+			color = 3;
+		}
+		else
+		{
+			color = 8;
+		}
+		drawWords(screen, posWords[x * 2 + 0], posWords[x * 2 + 1], 2, 2, word[x], color);
+	}
+}
+
+//Displays the mercy options
+void drawActOptions(CHAR_INFO *screen, int select) 
+{
+	double posWords[12] = { 190, 170, 830, 170, 190, 205, 830, 205, 190, 240, 830, 240 };
+	//std::string word[4] = { "*CONFORT", "*LAUGH", "*CRY", "*IGNORE" };
+	int color = 3;
+	for (int x = 0; x < e.getNumActs(); x++)
+	{
+		if (select == x)
+		{
+			color = 3;
+		}
+		else
+		{
+			color = 8;
+		}
+		drawWords(screen, posWords[x * 2 + 0], posWords[x * 2 + 1], 2, 2, e.getActWord(x), color);
+	}
 }
 
 //draws ovals
@@ -130,6 +776,7 @@ void drawOval(int posY, int posX, int radius, int thinkness, float xModify, floa
 	}
 }
 
+//Oval Bullets
 void drawOvalForBullets(int posY, int posX, int radius, int thinkness, float xModify, float yModify, int modThinkX, int modThinkY, int color, CHAR_INFO *screen, int bulletIdentification, int &invincible)
 {
 	int theta = 0; //The current angle that it's on
@@ -245,7 +892,7 @@ void fightBox(CHAR_INFO *screen)
 }
 
 //Updates the hp bar
-void drawEnemyDmg(CHAR_INFO *screen) 
+void drawEnemyDmg(CHAR_INFO *screen)
 {
 	if (e.getHP() > 0)
 	{
@@ -286,7 +933,7 @@ void initOverworld(CHAR_INFO *screen)
 		}
 	}*/
 
-	//candy room
+	//candy room 
 	for (int y = 0; y < h; y++)
 	{
 		for (int x = 0; x < w; x++)
@@ -297,11 +944,22 @@ void initOverworld(CHAR_INFO *screen)
 
 }
 
+//Erases only the box in the fight screen
+void eraseWhatIsInBox(CHAR_INFO *screen)
+{
+	for (int x = 0; x <= 1298; x++)
+	{
+		for (int y = 0; y <= 123; y++)
+		{
+			screen[(y + 151) * w + x + 101].Attributes = 0 * 16;
+		}
+	}
+}
+
 //draws the battle screen for the bullet hell
 void initBattleSreen(CHAR_INFO *screen)
 {
-	//clears screen
-	
+
 	for (int i = 0; i < h; i++)
 	{
 		for (int j = 0; j < w; j++)
@@ -309,6 +967,7 @@ void initBattleSreen(CHAR_INFO *screen)
 			backgound[i][j] = 0;
 		}
 	}
+
 	static int battle[h][w];
 
 	int graphic[4][15] = {
@@ -365,6 +1024,12 @@ void initBattleSreen(CHAR_INFO *screen)
 			screen[y * w + x].Attributes = backgound[y][x];
 		}
 	}
+	drawHealthBars(screen);
+}
+
+//Draws healthBars
+void drawHealthBars(CHAR_INFO *screen)
+{
 	//draw players health bar
 
 	for (int i = 0; i < p.getHP(); i++)
@@ -452,7 +1117,7 @@ void drawBackground(CHAR_INFO *screen)
 			screen[(y + 142) * w + x + 354].Attributes = 0 * 16;
 		}
 	}
-	
+
 }
 
 //draws sprite to the screen.
@@ -463,14 +1128,12 @@ void draw_sprite(CHAR_INFO *screen, double posX, double posY, int spr[17][25])
 
 		for (int y = 0; y < 34; y++)
 		{
-			
+
 			if ((double(x) / 2 < 50 && double(y) / 2 < 34) && (spr[y / 2][x / 2] >= 0))
 			{
-				screen[((int)posY + y)* w + ((int)posX + x)].Attributes = spr[y/2][x/2] * 16;
+				screen[((int)posY + y)* w + ((int)posX + x)].Attributes = spr[y / 2][x / 2] * 16;
 
 			}
-
-
 		}
 	}
 }
@@ -595,6 +1258,7 @@ void drawBullets(double posX, double posY, int bulletIdentification, CHAR_INFO *
 	drawOvalForBullets(posY, posX, 2, 2, 2, 1, 2, 1, 8, screen, bulletIdentification, invincible);
 }
 
+//Calls the move bullet function member and the draw bullet function
 void drawAndMoveBullets(float frametime, CHAR_INFO *screen, int bulletIdentification, int patternToUse, double initPosX, double initPosY, int &invincible)
 {
 	b[bulletIdentification].moveBullet(patternToUse, frametime);
@@ -665,6 +1329,15 @@ void printScreen(HANDLE hconsole, CHAR_INFO *screen, SMALL_RECT c)
 //main gameloop
 void gameloop()
 {
+	/* //For testing purposes if not wanted to start in the overworld
+	static int test = 0;
+	if (test == 0) {
+		e.setFroggit();
+		test++;
+	}
+	*/
+
+
 
 	//create buffer
 	CHAR_INFO *screen = new CHAR_INFO[w*h];
@@ -682,7 +1355,7 @@ void gameloop()
 	auto time = std::chrono::system_clock::now();
 	auto oldtime = std::chrono::system_clock::now();
 	double posX(1), posY(1);
-	initOverworld(screen); 
+	initOverworld(screen);
 	//just an infinite loop, should probably make it not infinite
 	while (true)
 	{
@@ -709,11 +1382,30 @@ void gameloop()
 			if (posY >= 350)
 			{
 				gamestate = 1;
+
+				std::mt19937 rand;
+				rand.seed(std::random_device()());
+				std::uniform_int_distribution<std::mt19937::result_type> random(1, 4); // distribution in range [1, 4] 
+				int monsterID = random(rand);
+				switch (monsterID)
+				{
+				case 1:
+					e.setNapstablook();
+					break;
+				case 2:
+					e.setToriel();
+					break;
+				case 3:
+					e.setFroggit();
+					break;
+				case 4:
+					e.setWhimsun();
+					break;
+				}
 			}
 		}
 		else if (gamestate == 1)
 		{
-			e.setNapstablook();
 			//changes background to battle screen
 			initBattleSreen(screen);
 			gamestate = 2;
@@ -731,7 +1423,7 @@ void gameloop()
 			draw_battle(screen, select);
 			if (s.isMain())
 			{
-				if (GetAsyncKeyState((unsigned short) 'A') & 0x8000 && btnCooldown == 0)
+				if (GetAsyncKeyState((unsigned short) VK_LEFT) & 0x8000 && btnCooldown == 0)
 				{
 					select--;
 					if (select < 0)
@@ -740,7 +1432,7 @@ void gameloop()
 					}
 					btnCooldown = 5;
 				}
-				if (GetAsyncKeyState((unsigned short) 'D') & 0x8000 && btnCooldown == 0)
+				if (GetAsyncKeyState((unsigned short) VK_RIGHT) & 0x8000 && btnCooldown == 0)
 				{
 					select++;
 					if (select >= 4)
@@ -757,28 +1449,21 @@ void gameloop()
 					switch (select)
 					{
 					case 0:
-						ifFight(0, 0, screen);
+						fightBox(screen);
 						s.setState(1);
 						break;
 					case 1:
-						ifAct(0);
-						gamestate = 3;
+						//drawOptions(screen, wantedPosX, wantedPosY);
+						s.setState(2);
+						btnCooldown = 5;
 						break;
 					case 2:
-						gamestate = 3;
+						s.setState(3);
+						btnCooldown = 5;
 						break;
 					case 3:
-						if (e.getMercyPoints() == 0)
-						{
-							ifMercy(0, 0);
-							initOverworld(screen);
-							e.setHP(50);
-						}
-						else
-						{
-							gamestate = 3;
-						}
-						break;
+						s.setState(4);
+						btnCooldown = 5;
 					}
 				}
 			}
@@ -801,9 +1486,7 @@ void gameloop()
 				}
 				else if (!a.isDone())
 				{
-					initBattleSreen(screen);
-					draw_battle(screen, select);
-					drawEnemyDmg(screen);
+					eraseWhatIsInBox(screen);
 					fightBox(screen);
 					a.move(frametime);
 					a.drawAttackBar(screen, w);
@@ -819,7 +1502,275 @@ void gameloop()
 					gamestate = 3;
 				}
 			}
+			else if (s.isItem())
+			{
+				static int select2 = 0;
+				if ((GetAsyncKeyState((unsigned short) 'Z') & 0x8000) && btnCooldown == 0)
+				{
+					if (pi.isValidDuringFights(select2))
+					{
+						if (pi.getItemIdentification(select2) == 999)
+						{
+							s.setState(0);
+							eraseWhatIsInBox(screen);
+							btnCooldown = 3;
+							select2 = 0;
+						}
+						else
+						{
+							p.itemEffect(pi.getItemIdentification(select2));
+							pi.itemUse(select2);
+							eraseWhatIsInBox(screen);
+							s.setState(0);
+							gamestate = 3;
+							drawHealthBars(screen);
+							select2 = 0;
+						}
+					}
+					btnCooldown = 3;
+				}
+				else if ((GetAsyncKeyState((unsigned short) 'X') & 0x8000) && btnCooldown == 0)
+				{
+					s.setState(0);
+					eraseWhatIsInBox(screen);
+					btnCooldown = 3;
+					select2 = 0;
+				}
+				if (GetAsyncKeyState((unsigned short)VK_UP) & 0x8000 && btnCooldown == 0)
+				{
+					if (select2 - 2 >= 0)
+					{
+						btnCooldown = 3;
+						select2 -= 2;
+					}
+				}
+				if (GetAsyncKeyState((unsigned short)VK_DOWN) & 0x8000 && btnCooldown == 0)
+				{
+					if (select2 + 2 < pi.getItemCount())
+					{
+						btnCooldown = 3;
+						select2 += 2;
+					}
+				}
+				if (GetAsyncKeyState((unsigned short)VK_LEFT) & 0x8000 && btnCooldown == 0)
+				{
+					if (select2 - 1 >= 0)
+					{
+						btnCooldown = 3;
+						select2 -= 1;
+					}
+				}
+				if (GetAsyncKeyState((unsigned short)VK_RIGHT) & 0x8000 && btnCooldown == 0)
+				{
+					if (select2 + 1 < pi.getItemCount())
+					{
+						btnCooldown = 3;
+						select2 += 1;
+					}
+				}
+				if (s.isItem())
+				{
+					drawItemOptions(screen, select2);
+				}
+			}
+			else if (s.isMercy())
+			{
 
+
+				static int select3 = 0;
+				static int buffer2 = 0;
+
+				if ((GetAsyncKeyState((unsigned short) 'Z') & 0x8000) && btnCooldown == 0)
+				{
+					if (select3 == 0)
+					{
+						if (e.getMercyPoints() == 0)
+						{
+							buffer2 = 10;
+						}
+						else
+						{
+							buffer2 = 30;
+							
+						}
+					}
+					else
+					{
+						std::mt19937 rand;
+						rand.seed(std::random_device()());
+						std::uniform_int_distribution<std::mt19937::result_type> random(1, e.getRunChance()); // distribution in range 1 to num 
+						int monsterRUN = random(rand);
+						if (monsterRUN == 1)
+						{
+							buffer2 = 80;
+						}
+						else
+						{
+							buffer2 = 60;
+						}
+					}
+				}
+				else if ((GetAsyncKeyState((unsigned short) 'X') & 0x8000) && btnCooldown == 0)
+				{
+					s.setState(0);
+					eraseWhatIsInBox(screen);
+					btnCooldown = 3;
+					select3 = 0;
+				}
+				if (GetAsyncKeyState((unsigned short)VK_LEFT) & 0x8000 && btnCooldown == 0)
+				{
+					if (select3 - 1 >= 0)
+					{
+						btnCooldown = 3;
+						select3 -= 1;
+					}
+				}
+				if (GetAsyncKeyState((unsigned short)VK_RIGHT) & 0x8000 && btnCooldown == 0)
+				{
+					if (select3 + 1 <= 1)
+					{
+						btnCooldown = 3;
+						select3 += 1;
+					}
+				}
+				if (s.isMercy() && buffer2 == 0)
+				{
+					drawMercyOptions(screen, select3);
+				}
+				if (buffer2 == 1)
+				{
+					if (e.getMercyPoints() == 0)
+					{
+						initOverworld(screen);
+						gamestate = 0;
+						s.setState(0);
+						p.setX(0);
+						buffer2--;
+					}
+				}
+				if (buffer2 > 1  && buffer2 < 20)
+				{
+					eraseWhatIsInBox(screen);
+					buffer2--;
+					drawWords(screen, 190, 170, 2, 2, "*YOU SUCCESSFULLY SPARED", 8);
+				}
+				if (buffer2 == 20)
+				{
+					s.setState(0);
+					eraseWhatIsInBox(screen);
+					gamestate = 3;
+					buffer2 = 0;
+				}
+				if (buffer2 > 20 && buffer2 < 50)
+				{
+					eraseWhatIsInBox(screen);
+					buffer2--;
+					drawWords(screen, 190, 170, 2, 2, "*SPARE FAILED!", 8);
+				}
+				if (buffer2 == 50)
+				{
+					s.setState(0);
+					eraseWhatIsInBox(screen);
+					gamestate = 3;
+				}
+				if (buffer2 > 50 && buffer2 < 70)
+				{
+					eraseWhatIsInBox(screen);
+					buffer2--;
+					drawWords(screen, 190, 170, 2, 2, "*YOU TRIPED TRYING TO RUN", 8);
+				}
+				if (buffer2 == 70)
+				{
+					initOverworld(screen);
+					gamestate = 0;
+					s.setState(0);
+					p.setX(0);
+					select3 = 0;
+					buffer2--;
+				}
+				if (buffer2 > 70)
+				{
+					eraseWhatIsInBox(screen);
+					buffer2--;
+					drawWords(screen, 190, 170, 2, 2, "*YOU RAN AWAY  COWARD!", 8);
+				}
+			}
+			else if (s.isAct())
+			{
+				static int buffer = 0;
+				static int select4 = 0;
+
+				if ((GetAsyncKeyState((unsigned short) 'Z') & 0x8000) && btnCooldown == 0 && buffer == 0)
+				{
+					btnCooldown = 5;
+					buffer = 20;
+				}
+				else if ((GetAsyncKeyState((unsigned short) 'X') & 0x8000) && btnCooldown == 0 && buffer == 0)
+				{
+					s.setState(0);
+					eraseWhatIsInBox(screen);
+					btnCooldown = 3;
+					select4 = 0;
+				}
+				if (GetAsyncKeyState((unsigned short)VK_UP) & 0x8000 && btnCooldown == 0 && buffer == 0)
+				{
+					if (select4 - 2 >= 0)
+					{
+						btnCooldown = 3;
+						select4 -= 2;
+					}
+				}
+				if (GetAsyncKeyState((unsigned short)VK_DOWN) & 0x8000 && btnCooldown == 0 && buffer == 0)
+				{
+					if (select4 + 2 < 4)
+					{
+						btnCooldown = 3;
+						select4 += 2;
+					}
+				}
+				if (GetAsyncKeyState((unsigned short)VK_LEFT) & 0x8000 && btnCooldown == 0 && buffer == 0)
+				{
+					if (select4 - 1 >= 0)
+					{
+						btnCooldown = 3;
+						select4 -= 1;
+					}
+				}
+				if (GetAsyncKeyState((unsigned short)VK_RIGHT) & 0x8000 && btnCooldown == 0 && buffer == 0)
+				{
+					if (select4 + 1 <= 3)
+					{
+						btnCooldown = 3;
+						select4 += 1;
+					}
+				}
+				if (s.isAct() && buffer == 0)
+				{
+					drawActOptions(screen, select4);
+				}
+				if (buffer > 0)
+				{
+					buffer--;
+					if (e.isLowersMercyPoints(select4))
+					{
+						e.lowerMercyPoints();
+					}
+					if (buffer >= 1)
+					{
+						eraseWhatIsInBox(screen);
+						drawWords(screen, 190, 170, 2, 2, e.getResponce(select4), 8);
+					}
+					if (buffer == 1)
+					{
+						s.setState(0);
+						eraseWhatIsInBox(screen);
+						gamestate = 3;
+						drawHealthBars(screen);
+						buffer = 0;
+						select4 = 0;
+					}
+				}
+			}
 		}
 		else if (gamestate == 3) 
 		{
@@ -850,6 +1801,7 @@ void gameloop()
 			}
 			
 			
+
 			
 			
 			p2.invertedMove(frametime);
@@ -933,7 +1885,15 @@ void gameloop()
 		}
 		else if (gamestate == 6)
 		{
-			;
+			for (int j = 0; j < w; j++)
+			{
+				for (int i = 0; i < h; i++)
+				{
+					screen[i * w + j].Attributes = 0;
+				}
+			}
+			drawWords(screen, 120, 80, 8, 4, "GAME OVER", 15);
+			drawWords(screen, 120, 140, 6, 3, "YOU SUCK!", 15);
 		}
 
 		printScreen(hconsole, screen, c);
@@ -953,7 +1913,10 @@ int main()
 	font.dwFontSize.Y = 2;
 	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &font);
 
-
+	//Adding to test items
+	pi.itemStore(4);
+	//pi.itemStore(3);
+	//pi.itemStore(1);
 
 	gameloop();
 

@@ -1,10 +1,9 @@
-#pragma once
-#include <vector>;
-#include <Windows.h>
-#include <chrono>
-#include "sprites.h"
 #ifndef PLAYER_H
 #define PLAYER_H
+#include <vector>
+#include <Windows.h>
+#include <chrono>
+
 class Player
 {
 public:
@@ -22,6 +21,9 @@ public:
 	void setAttack(int buff);
 	void takeDmg(int damage);
 	void reset();
+	void itemEffect(int itemIdentification);
+
+
 
 	//please put sprite in a different file or something
 	int sprite[4][17][25] = {
@@ -105,16 +107,18 @@ public:
 	};
 
 
-
 private:
 	std::vector<int> inventory;
 	//combat variables
 	int health;
 	int attack;
+
 	int lastDir;
 	//overworld variables
 	double pX, pY;
 
+	//Can take out the constant part if we want to add leveling
+	const int MAXHEALTH = 100;
 
 };
 
