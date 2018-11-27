@@ -1261,7 +1261,7 @@ void drawBullets(double posX, double posY, int bulletIdentification, CHAR_INFO *
 //Calls the move bullet function member and the draw bullet function
 void drawAndMoveBullets(float frametime, CHAR_INFO *screen, int bulletIdentification, int patternToUse, double initPosX, double initPosY, int &invincible)
 {
-	b[bulletIdentification].moveBullet(patternToUse, frametime);
+	b[bulletIdentification].moveBullet(e.getAttackID(patternToUse), frametime, bulletIdentification, p2.getX(), p2.getY());
 	if (b[bulletIdentification].legalBullet(4, 4, 0, 0))
 	{
 		drawBullets(b[bulletIdentification].getX(), b[bulletIdentification].getY(), bulletIdentification, screen, invincible);
@@ -1672,6 +1672,7 @@ void gameloop()
 					s.setState(0);
 					eraseWhatIsInBox(screen);
 					gamestate = 3;
+					buffer2 = 0;
 				}
 				if (buffer2 > 50 && buffer2 < 70)
 				{
@@ -1686,7 +1687,7 @@ void gameloop()
 					s.setState(0);
 					p.setX(0);
 					select3 = 0;
-					buffer2--;
+					buffer2 = 0;
 				}
 				if (buffer2 > 70)
 				{
@@ -1801,44 +1802,28 @@ void gameloop()
 			}
 			
 			
-
-			
+			//This is temporary, will add a random aspect as well as a save mechanic for it later
+			int attackNumber = 0; 
 			
 			p2.invertedMove(frametime);
 
 			
-
-			if (duration % 2 == 1)
+			//Spawns the bullet with it's pattern
+			if (b->ifTimeIsAppear(duration, legalBullets))
 			{
-				b[legalBullets].setXY(750, 180);
-				b[legalBullets].setGoal(p2.getX(), p2.getY());
-				b[legalBullets].calculateSpeed(15);
+				b[legalBullets].initbullets(legalBullets, e.getAttackID(attackNumber), p2.getX(), p2.getY(), frametime);
 				legalBullets++;
 			}
-			if ((duration + 1) % 2 == 1)
-			{
-				b[legalBullets].setXY(600, 180);
-				b[legalBullets].setGoal(p2.getX() + 30, p2.getY() - 30);
-				b[legalBullets].calculateSpeed(15);
-				legalBullets++;
-			}
-			if ((duration + 300) % 2 == 1)
-			{
-				b[legalBullets].setXY(850, 220);
-				b[legalBullets].setGoal(p2.getX() - 30, p2.getY() + 30);
-				b[legalBullets].calculateSpeed(15);
-				legalBullets++;
-			}
-
-
-
+			
+			//Checks if bullets are legal (exist and in bounds) if so draws and moves them
+			//I will add the different bullet sprites later
 			if (duration >= 1)
 			{
 				for (int x = 0; x < legalBullets; x++)
 				{
 					if (b[x].legalBullet(4, 4, 7, 10))
 					{
-						drawAndMoveBullets(frametime, screen, x, 0, 1, 1, invincible);
+						drawAndMoveBullets(frametime, screen, x, attackNumber, 1, 1, invincible);
 					}
 				}
 			}

@@ -22,6 +22,9 @@ public:
 	bool isLowersMercyPoints(int position);
 	std::string getResponce(int position);
 	int getRunChance();
+	int getMonsterID();
+	int getNumberOfAttacks();
+	int getAttackID(int attackID);
 private:
 	int health;
 	int attack;
@@ -31,6 +34,8 @@ private:
 	int numberOfActs;
 	int whatLowersMercyPoints;
 	int runChance;
+	int monsterID;
+	int numberOfAttacks;
 	std::string possibleActs[4];
 	std::string responces[4];
 };

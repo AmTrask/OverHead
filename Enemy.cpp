@@ -7,6 +7,7 @@ Enemy::Enemy()
 	this->attack = 1;
 	this->tillMercyPoints = 1;
 	this->missingHealth = 0;
+	this->monsterID = 1;
 }
 void Enemy::setNapstablook()
 {
@@ -26,6 +27,8 @@ void Enemy::setNapstablook()
 	responces[2] = { "*YOU CANNOT THREATEN THIS GHOST" };
 	responces[3] = { "*YOU CHEER UP NAPSTABLOOK" };
 	runChance = 25;
+	monsterID = 0;
+	numberOfAttacks = 2 - 1; //The minus one is for the random thigny I did it this way to not forget how many there are to code
 
 }
 void Enemy::setFroggit()
@@ -44,6 +47,9 @@ void Enemy::setFroggit()
 	responces[1] = { "*YOU COMPLEMENT THE FROG, IT BLUSHES" };
 	responces[2] = { "*YOU THREATEN THE FROG!" };
 	runChance = 4;
+	monsterID = 1;
+	numberOfAttacks = 2 - 1;
+
 }
 void Enemy::setToriel()
 {
@@ -59,6 +65,8 @@ void Enemy::setToriel()
 	responces[0] = { "*TORIEL ATK-20 DEF-0" };
 	responces[1] = { "*YOU CANNOT THINK OF WHAT TO SAY" };
 	runChance = 9999999999999999999;
+	monsterID = 2;
+	numberOfAttacks = 4 - 1;
 }
 void Enemy::setWhimsun()
 {
@@ -76,7 +84,8 @@ void Enemy::setWhimsun()
 	responces[1] = { "*YOU TRIED CONSOLING, IT DIDN'T WORK" };
 	responces[2] = { "*WHIMSUN CANNOT BE MORE TERRORIZED" };
 	runChance = 1;
-
+	monsterID = 3;
+	numberOfAttacks = 0;
 }
 int Enemy::getNumActs()
 {
@@ -143,4 +152,52 @@ void Enemy::lowerMercyPoints()
 void Enemy::setMercyPoints(int mercyPoints)
 {
 	tillMercyPoints = mercyPoints;
+}
+int Enemy::getMonsterID()
+{
+	return monsterID;
+}
+int Enemy::getNumberOfAttacks()
+{
+	return numberOfAttacks;
+}
+int Enemy::getAttackID(int attackID)
+{
+	switch (attackID)
+	{
+	case 0:
+		switch (this->monsterID)
+		{
+		case 0:
+			return 0;
+		case 1:
+			return 2;
+		case 2:
+			return 4;
+		case 3:
+			return 8;
+		}
+	case 1:
+		switch (this->monsterID)
+		{
+		case 0:
+			return 1;
+		case 1:
+			return 3;
+		case 2:
+			return 5;
+		}
+	case 2:
+		switch (this->monsterID)
+		{
+		case 2:
+			return 6;
+		}
+	case 3:
+		switch (this->monsterID)
+		{
+		case 2:
+			return 7;
+		}
+	}
 }
