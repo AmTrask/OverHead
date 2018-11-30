@@ -776,7 +776,7 @@ void drawOval(int posY, int posX, int radius, int thinkness, float xModify, floa
 	}
 }
 
-//Oval Bullets
+//Oval Bullets Will be taken out soon
 void drawOvalForBullets(int posY, int posX, int radius, int thinkness, float xModify, float yModify, int modThinkX, int modThinkY, int color, CHAR_INFO *screen, int bulletIdentification, int &invincible)
 {
 	int theta = 0; //The current angle that it's on
@@ -804,12 +804,127 @@ void drawOvalForBullets(int posY, int posX, int radius, int thinkness, float xMo
 			for (int x(0); x < thinkness; x++) //Adds thinkness to solve broken oval (first for loop controls the upper and lower lines thinkness while seccond controls the sides)
 			{
 				for (int y(0); y < thinkness; y++) {
-					checkHitAndDealDmg(screen, bulletIdentification, ((j + x)* w + i + y), invincible);
+					checkHitAndDealDmg(screen, ((j + x)* w + i + y), invincible);
 					screen[((j + x)* w + i + y)].Attributes = color * 16;
 				}
 			}
 		}
 	}
+}
+
+//Draws toriels fire
+void drawFireAndAnimate(int posY, int posX, float xModify, float yModify, CHAR_INFO *screen, int &invincible)
+{
+	for (int y = 0; y < 20 * yModify; y++)
+	{
+		for (int x = 0; x < 20 * xModify; x++)
+		{
+			if ((fire1[y / (int)yModify][x / (int)xModify] * 16) != 0)
+			{ 
+				checkHitAndDealDmg(screen, ((int)posY + y)* w + ((int)posX + x), invincible);
+				screen[((int)posY + y)* w + ((int)posX + x)].Attributes = 15 * 16; 
+			}
+		}
+	}
+}
+void drawFireAndAnimate2(int posY, int posX, float xModify, float yModify, CHAR_INFO *screen, int &invincible)
+{
+	for (int y = 0; y < 20 * yModify; y++)
+	{
+		for (int x = 0; x < 20 * xModify; x++)
+		{
+			if ((fire2[y / (int)yModify][x / (int)xModify] * 16) != 0)
+			{
+				checkHitAndDealDmg(screen, ((int)posY + y)* w + ((int)posX + x), invincible);
+				screen[((int)posY + y)* w + ((int)posX + x)].Attributes = 15 * 16;
+			}
+		}
+	}
+}
+
+//Draws flues
+void drawFlyAndAnimate(int posY, int posX, float xModify, float yModify, CHAR_INFO *screen, int &invincible)
+{
+	for (int y = 0; y < 20 * yModify; y++)
+	{
+		for (int x = 0; x < 20 * xModify; x++)
+		{
+			if ((fly1[y / (int)yModify][x / (int)xModify] * 16) != 0)
+			{
+				checkHitAndDealDmg(screen, ((int)posY + y)* w + ((int)posX + x), invincible);
+				screen[((int)posY + y)* w + ((int)posX + x)].Attributes = 15 * 16;
+			}
+		}
+	}
+}
+void drawFlyAndAnimate2(int posY, int posX, float xModify, float yModify, CHAR_INFO *screen, int &invincible)
+{
+	for (int y = 0; y < 20 * yModify; y++)
+	{
+		for (int x = 0; x < 20 * xModify; x++)
+		{
+			if ((fly2[y / (int)yModify][x / (int)xModify] * 16) != 0)
+			{
+				checkHitAndDealDmg(screen, ((int)posY + y)* w + ((int)posX + x), invincible);
+				screen[((int)posY + y)* w + ((int)posX + x)].Attributes = 15 * 16;
+			}
+		}
+	}
+}
+
+//Draws frog
+void drawFrogAndAnimate(int posY, int posX, float xModify, float yModify, CHAR_INFO *screen, int &invincible)
+{
+	for (int y = 0; y < 20 * yModify; y++)
+	{
+		for (int x = 0; x < 40 * xModify; x++)
+		{
+			if ((frog1[y / (int)yModify][x / (int)xModify] * 16) != 0)
+			{
+				checkHitAndDealDmg(screen, ((int)posY + y)* w + ((int)posX + x), invincible);
+				screen[((int)posY + y)* w + ((int)posX + x)].Attributes = 15 * 16;
+			}
+		}
+	}
+}
+void drawFrogAndAnimate2(int posY, int posX, float xModify, float yModify, CHAR_INFO *screen, int &invincible)
+{
+	for (int y = 0; y < 30 * yModify; y++)
+	{
+		for (int x = 0; x < 50 * xModify; x++)
+		{
+			if ((frog2[y / (int)yModify][x / (int)xModify] * 16) != 0)
+			{
+				checkHitAndDealDmg(screen, ((int)posY + y)* w + ((int)posX + x), invincible);
+				screen[((int)posY + y)* w + ((int)posX + x)].Attributes = 15 * 16;
+			}
+		}
+	}
+}
+
+//Draws tears
+void drawTears(int posY, int posX, float xModify, float yModify, CHAR_INFO *screen, int &invincible)
+{
+	for (int y = 0; y < 20 * yModify; y++)
+	{
+		for (int x = 0; x < 20 * xModify; x++)
+		{
+			if ((tear[y / (int)yModify][x / (int)xModify] * 16) != 0)
+			{
+				checkHitAndDealDmg(screen, ((int)posY + y)* w + ((int)posX + x), invincible);
+				screen[((int)posY + y)* w + ((int)posX + x)].Attributes = 15 * 16;
+			}
+		}
+	}
+}
+
+//Gets a random number for the attacks
+int getRandom(int maxNumForAttack)
+{
+	std::mt19937 rand;
+	rand.seed(std::random_device()());
+	std::uniform_int_distribution<std::mt19937::result_type> random(0, maxNumForAttack);
+	return random(rand);
 }
 
 //drays the graphics for the damage box
@@ -1209,7 +1324,7 @@ void drawHeart(CHAR_INFO *screen, double posX, double posY)
 }
 
 //Checks for hitbox
-void checkHitAndDealDmg(CHAR_INFO *screen, int bulletIdentification, int posToCheck, int &invincible)
+void checkHitAndDealDmg(CHAR_INFO *screen, int posToCheck, int &invincible)
 {
 
 	if (invincible != 0)
@@ -1245,7 +1360,7 @@ void checkHitAndDealDmg(CHAR_INFO *screen, int bulletIdentification, int posToCh
 }
 
 //draws the bullets
-void drawBullets(double posX, double posY, int bulletIdentification, CHAR_INFO *screen, int &invincible)
+void drawBullets(double posX, double posY, int bulletIdentification, CHAR_INFO *screen, int &invincible, int whatToDraw)
 {
 	//for (int j(0); j < 4; j++)
 	//{
@@ -1255,16 +1370,54 @@ void drawBullets(double posX, double posY, int bulletIdentification, CHAR_INFO *
 			//screen[(j + int(posY)) * w + i + int(posX)].Attributes = 6 * 16;
 		//}
 	//}
-	drawOvalForBullets(posY, posX, 2, 2, 2, 1, 2, 1, 8, screen, bulletIdentification, invincible);
+	switch (whatToDraw)
+	{
+	case 0:
+		drawOvalForBullets(posY, posX, 2, 2, 2, 1, 2, 1, 8, screen, bulletIdentification, invincible);
+		break;
+	case 1:
+		drawFireAndAnimate(posY, posX, 1, 1, screen, invincible);
+		break;
+	case 2:
+		drawFireAndAnimate2(posY, posX, 1, 1, screen, invincible);
+		break;
+	case 3:
+		drawFlyAndAnimate(posY, posX, 1, 1, screen, invincible);
+		break;
+	case 4:
+		drawFlyAndAnimate2(posY, posX, 1, 1, screen, invincible);
+		break;
+	case 5:
+		drawFrogAndAnimate(posY, posX, 1, 1, screen, invincible);
+		break;
+	case 6:
+		drawFrogAndAnimate2(posY, posX, 1, 1, screen, invincible);
+		break;
+	case 7:
+		drawTears(posY, posX, 1, 1, screen, invincible);
+		break;
+	}
 }
 
 //Calls the move bullet function member and the draw bullet function
-void drawAndMoveBullets(float frametime, CHAR_INFO *screen, int bulletIdentification, int patternToUse, double initPosX, double initPosY, int &invincible)
+void drawAndMoveBullets(float frametime, CHAR_INFO *screen, int bulletIdentification, int patternToUse, double initPosX, double initPosY, int &invincible, double *sharedAngle)
 {
-	b[bulletIdentification].moveBullet(e.getAttackID(patternToUse), frametime, bulletIdentification, p2.getX(), p2.getY());
-	if (b[bulletIdentification].legalBullet(4, 4, 0, 0))
+	double legalAdditionSides;
+	double legalAdditionUpDown;
+	b[bulletIdentification].moveBullet(e.getAttackID(patternToUse), frametime, bulletIdentification, p2.getX(), p2.getY(), sharedAngle);
+	if (b[bulletIdentification].getSpriteToUse() == 1 || b[bulletIdentification].getSpriteToUse() == 2)
 	{
-		drawBullets(b[bulletIdentification].getX(), b[bulletIdentification].getY(), bulletIdentification, screen, invincible);
+		legalAdditionSides = 5;
+		legalAdditionUpDown = 4;
+	}
+	else
+	{
+		legalAdditionSides = 4;
+		legalAdditionUpDown = 4;
+	}
+	if (b[bulletIdentification].legalBullet(legalAdditionUpDown, legalAdditionUpDown, legalAdditionSides, legalAdditionSides))
+	{
+		drawBullets(b[bulletIdentification].getX(), b[bulletIdentification].getY(), bulletIdentification, screen, invincible, b[bulletIdentification].getSpriteToUse());
 	}
 }
 
@@ -1292,11 +1445,7 @@ void draw_battle(CHAR_INFO *screen, int selection)
 		for (int y = 0; y < h; y++)
 		{
 
-			//draw monster (it will just be a square for now)
-			if (x > 675 && x < 825 && y > 10 && y < 100)
-			{
-				screen[y*w + x].Attributes = 15 * 16;
-			}
+		
 
 			if (backgound[y][x] != 0)
 			{
@@ -1315,8 +1464,66 @@ void draw_battle(CHAR_INFO *screen, int selection)
 			}
 		}
 	}
-
-
+	//draw monster (it will just be a square for now)
+	switch (e.getMonsterID())
+	{
+	case 0:
+		for (int y = 0; y < 18 * 6; y++)
+		{
+			for (int x = 0; x < 25 * 6; x++)
+			{
+				if ((napstablook[y / 6][x / 6]) == 7)
+				{
+					screen[(y + 10)* w + (x + 675)].Attributes = 15 * 16;
+				}
+			}
+		}
+		break;
+	case 2:
+		for (int y = 0; y < 26 * 4; y++)
+		{
+			for (int x = 0; x < 25 * 4; x++)
+			{
+				if ((toriel[y / 4][x / 4]) == 7)
+				{
+					screen[(y + 10)* w + (x + 675)].Attributes = 15 * 16;
+				}
+				if ((toriel[y / 4][x / 4]) == 9)
+				{
+					screen[(y + 10)* w + (x + 675)].Attributes = 9 * 16;
+				}
+				if ((toriel[y / 4][x / 4]) == 5)
+				{
+					screen[(y + 10)* w + (x + 675)].Attributes = 5 * 16;
+				}
+			}
+		}
+		break; 
+	case 1:
+			for (int y = 0; y < 9 * 8; y++)
+			{
+				for (int x = 0; x < 20 * 8; x++)
+				{
+					if ((froggit[y / 8][x / 8]) == 7)
+					{
+						screen[(y + 10)* w + (x + 675)].Attributes = 15 * 16;
+					}
+				}
+			}
+			break;
+	case 3:
+		for (int y = 0; y < 10 * 8; y++)
+		{
+			for (int x = 0; x < 24 * 8; x++)
+			{
+				if ((whimsun[y / 8][x / 8]) == 7)
+				{
+					screen[(y + 10)* w + (x + 675)].Attributes = 15 * 16;
+				}
+			}
+		}
+		break;
+	}
 }
 
 //puts everything drawn to "Screen" on the screen
@@ -1329,15 +1536,6 @@ void printScreen(HANDLE hconsole, CHAR_INFO *screen, SMALL_RECT c)
 //main gameloop
 void gameloop()
 {
-	/* //For testing purposes if not wanted to start in the overworld
-	static int test = 0;
-	if (test == 0) {
-		e.setFroggit();
-		test++;
-	}
-	*/
-
-
 
 	//create buffer
 	CHAR_INFO *screen = new CHAR_INFO[w*h];
@@ -1386,7 +1584,7 @@ void gameloop()
 				std::mt19937 rand;
 				rand.seed(std::random_device()());
 				std::uniform_int_distribution<std::mt19937::result_type> random(1, 4); // distribution in range [1, 4] 
-				int monsterID = random(rand);
+				int monsterID = 4;// random(rand);
 				switch (monsterID)
 				{
 				case 1:
@@ -1483,6 +1681,11 @@ void gameloop()
 					{
 						gamestate = 5;
 					}
+					else if (e.getMonsterID() == 3)
+					{
+						drawWords(screen, 190, 170, 2, 2, "WHIMSUN RAN AWAY CRYING", 4);
+						gamestate = 5;
+					}
 				}
 				else if (!a.isDone())
 				{
@@ -1500,6 +1703,12 @@ void gameloop()
 					draw_battle(screen, select);
 					drawEnemyDmg(screen);
 					gamestate = 3;
+					if (e.getMonsterID() == 3)
+					{
+						drawWords(screen, 190, 170, 2, 2, "WHIMSUN RAN AWAY CRYING", 4);
+
+						gamestate = 5;
+					}
 				}
 			}
 			else if (s.isItem())
@@ -1525,6 +1734,12 @@ void gameloop()
 							gamestate = 3;
 							drawHealthBars(screen);
 							select2 = 0;
+							if (e.getMonsterID() == 3)
+							{
+								drawWords(screen, 190, 170, 2, 2, "WHIMSUN RAN AWAY CRYING", 4);
+
+								gamestate = 5;
+							}
 						}
 					}
 					btnCooldown = 3;
@@ -1769,6 +1984,12 @@ void gameloop()
 						drawHealthBars(screen);
 						buffer = 0;
 						select4 = 0;
+						if (e.getMonsterID() == 3)
+						{
+							drawWords(screen, 190, 170, 2, 2, "WHIMSUN RAN AWAY CRYING", 4);
+
+							gamestate = 5;
+						}
 					}
 				}
 			}
@@ -1783,7 +2004,6 @@ void gameloop()
 			static int legalBullets = 0;
 			static int invincible = 0;
 			static int duration = 0;
-			static int toMove[999] = { 0 };
 			drawBackground(screen);
 			int pos2X = p2.getX();
 			int pos2Y = p2.getY();
@@ -1802,19 +2022,52 @@ void gameloop()
 			}
 			
 			
-			//This is temporary, will add a random aspect as well as a save mechanic for it later
-			int attackNumber = 0; 
+			static int attackNumber = 0;
+			int maxNumForAttack;
+			switch(e.getMonsterID())
+			{
+			case 0:
+				maxNumForAttack = 1;
+				break;
+			case 1:
+				maxNumForAttack = 3;
+				break;
+			case 2:
+				maxNumForAttack = 1;
+				break;
+			case 3:
+				maxNumForAttack = 0;
+				break;
+			}
+			if (duration == 0)
+			{
+				attackNumber = getRandom(maxNumForAttack);
+			}
 			
 			p2.invertedMove(frametime);
-
-			
 			//Spawns the bullet with it's pattern
-			if (b->ifTimeIsAppear(duration, legalBullets))
+
+			//Special, for attacks that initialize more then one bullet at once
+
+			if (e.getAttackID(attackNumber) == 4 || e.getAttackID(attackNumber) == 5 || e.getAttackID(attackNumber) == 7)
+			{
+				for (int x = 0; x < e.getAmountOfBullets(); x++)
+				{
+					if (b->ifTimeIsAppear(duration, x))
+					{
+						b[legalBullets].initbullets(legalBullets, e.getAttackID(attackNumber), p2.getX(), p2.getY(), frametime);
+						legalBullets++;
+					}
+				}
+			}
+			//Normal attacks
+			else if (b->ifTimeIsAppear(duration, legalBullets))
 			{
 				b[legalBullets].initbullets(legalBullets, e.getAttackID(attackNumber), p2.getX(), p2.getY(), frametime);
 				legalBullets++;
 			}
-			
+			static double sharedAngles = 0;
+			double* sharedAngle = &sharedAngles;
 			//Checks if bullets are legal (exist and in bounds) if so draws and moves them
 			//I will add the different bullet sprites later
 			if (duration >= 1)
@@ -1823,7 +2076,7 @@ void gameloop()
 				{
 					if (b[x].legalBullet(4, 4, 7, 10))
 					{
-						drawAndMoveBullets(frametime, screen, x, attackNumber, 1, 1, invincible);
+						drawAndMoveBullets(frametime, screen, x, attackNumber, 1, 1, invincible, sharedAngle);
 					}
 				}
 			}
@@ -1840,6 +2093,7 @@ void gameloop()
 			{
 				gamestate = 1;
 				duration = 0;
+				b->resetBullets();
 				legalBullets = 0;
 				initBattleSreen(screen);
 				gamestate = 2;
@@ -1857,6 +2111,10 @@ void gameloop()
 				initBattleSreen(screen);
 				drawEnemyDmg(screen);
 				WHY--;
+				if (e.getMonsterID() == 3 && e.getHP() > 0)
+				{
+					drawWords(screen, 190, 170, 2, 2, "WHIMSUN RAN AWAY CRYING", 4);
+				}
 			}
 			else if (WHY == 0)
 			{
@@ -1899,6 +2157,8 @@ int main()
 	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &font);
 
 	//Adding to test items
+	//This is what will be used when picking up an item in the overworld
+	
 	pi.itemStore(4);
 	//pi.itemStore(3);
 	//pi.itemStore(1);

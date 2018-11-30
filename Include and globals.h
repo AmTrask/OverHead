@@ -9,11 +9,12 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "State.h"
-
+#include "attackSpites.h"
 #include "maps.h"
 #include "AttackSequence.h"
 #include "BulletPaterns.h"
 #include "PlayerItems.h"
+#include "monsterSprites.h"
 
 
 #define LOG(x) std::cout << x << std::endl //Defines simply to save myself some time
@@ -49,7 +50,7 @@ void initEnemyBattle(CHAR_INFO *screen);
 void drawBackground(CHAR_INFO *screen);
 void draw_sprite(CHAR_INFO *screen, double posX, double posY, int spr[8][8]);
 void drawHeart(CHAR_INFO *screen, double posX, double posY);
-void checkHitAndDealDmg(CHAR_INFO *screen, int bulletIdentification, int posToCheck, int &invincible);
+void checkHitAndDealDmg(CHAR_INFO *screen, int bulletIdentification, int &invincible);
 void drawBullets(double posX, double posY, int bulletIdentification, CHAR_INFO *screen, int &invincible);
 void drawAndMoveBullets(float frametime, CHAR_INFO *screen, int bulletIdentification, int patternToUse, double initPosX, double initPosY, int &invincible);
 void draw_backgound(CHAR_INFO *screen);

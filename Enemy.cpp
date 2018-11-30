@@ -8,6 +8,8 @@ Enemy::Enemy()
 	this->tillMercyPoints = 1;
 	this->missingHealth = 0;
 	this->monsterID = 1;
+	this->amountOfBullets = 0;
+
 }
 void Enemy::setNapstablook()
 {
@@ -173,6 +175,7 @@ int Enemy::getAttackID(int attackID)
 		case 1:
 			return 2;
 		case 2:
+			this->amountOfBullets = 22;
 			return 4;
 		case 3:
 			return 8;
@@ -185,6 +188,7 @@ int Enemy::getAttackID(int attackID)
 		case 1:
 			return 3;
 		case 2:
+			this->amountOfBullets = 99;
 			return 5;
 		}
 	case 2:
@@ -197,7 +201,13 @@ int Enemy::getAttackID(int attackID)
 		switch (this->monsterID)
 		{
 		case 2:
+			this->amountOfBullets = 99;
 			return 7;
 		}
 	}
+}
+
+int Enemy::getAmountOfBullets()
+{
+	return this->amountOfBullets;
 }

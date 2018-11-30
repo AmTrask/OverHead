@@ -25,6 +25,8 @@ public:
 	int getMonsterID();
 	int getNumberOfAttacks();
 	int getAttackID(int attackID);
+	int getAmountOfBullets();
+
 private:
 	int health;
 	int attack;
@@ -38,6 +40,8 @@ private:
 	int numberOfAttacks;
 	std::string possibleActs[4];
 	std::string responces[4];
+	int amountOfBullets;
+
 };
 
 #endif ENEMY_H
