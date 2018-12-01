@@ -1,6 +1,6 @@
 #ifndef LOAD_H
 #define LOAD_H
-
+#include "Map.h"
 #include <iostream>
 #include <Windows.h>
 #include <chrono>
@@ -38,7 +38,10 @@ AttackSequence a;
 BulletPaterns b[999];
 PlayerItems pi;
 
-
+//maps stuff
+Map maps[40];
+int currentmap;
+int CurrMapPos[2];
 
 void fightBox(CHAR_INFO *screen);
 void drawOval(int posY, int posX, int radius, int thinkness, float xModify, float yModify, int modThinkX, int modThinkY, int color, CHAR_INFO *screen);

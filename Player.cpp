@@ -41,14 +41,14 @@ int Player::move(float frametime, int background[400][1500])
 	{
 		lastDir = 1;
 		//keeps player in bounds 
-		if (pY - 50 * frametime > 0 && (background[int(pY + 25 - 50 * frametime)][int(pX)] == 208 || background[int(pY + 25 - 50 * frametime)][int(pX)] == 64) && (background[int(pY + 32 - 50 * frametime)][int(pX + 50)] == 208 || background[int(pY + 32 - 50 * frametime)][int(pX + 25)] == 64))
+		//if (pY - 50 * frametime > 0 && (background[int(pY + 25 - 50 * frametime)][int(pX)] == 208 || background[int(pY + 25 - 50 * frametime)][int(pX)] == 64) && (background[int(pY + 32 - 50 * frametime)][int(pX + 50)] == 208 || background[int(pY + 32 - 50 * frametime)][int(pX + 25)] == 64))
 		{
 			pY -= 50.0*frametime;
 		}
 	}
 	if (GetAsyncKeyState((unsigned short) VK_DOWN) & 0x8000)
 	{
-		if (pY + 50 * frametime < 1500 && (background[int(pY + 32 + 50 * frametime)][int(pX + 10)] == 208 || background[int(pY + 32 + 50 * frametime)][int(pX + 5)] == 64) && (background[int(pY + 32 + 50 * frametime)][int(pX + 50)] == 208 || background[int(pY + 32 + 50 * frametime)][int(pX + 25)] == 64))
+		//if (pY + 50 * frametime < 1500 && (background[int(pY + 32 + 50 * frametime)][int(pX + 10)] == 208 || background[int(pY + 32 + 50 * frametime)][int(pX + 5)] == 64) && (background[int(pY + 32 + 50 * frametime)][int(pX + 50)] == 208 || background[int(pY + 32 + 50 * frametime)][int(pX + 25)] == 64))
 		{
 			pY += 50.0*frametime;
 		}
@@ -56,7 +56,7 @@ int Player::move(float frametime, int background[400][1500])
 	}
 	if (GetAsyncKeyState((unsigned short) VK_LEFT) & 0x8000)
 	{
-		if (pX - 75 * frametime > 0 && (background[int(pY + 25)][int(pX - 75 * frametime)] == 208 || background[int(pY + 25)][int(pX - 75 * frametime)] == 64) && (background[int(pY + 25)][int(pX - 75 * frametime)] == 208 || background[int(pY + 25)][int(pX - 75 * frametime)] == 64))
+		//if (pX - 75 * frametime > 0 && (background[int(pY + 25)][int(pX - 75 * frametime)] == 208 || background[int(pY + 25)][int(pX - 75 * frametime)] == 64) && (background[int(pY + 25)][int(pX - 75 * frametime)] == 208 || background[int(pY + 25)][int(pX - 75 * frametime)] == 64))
 		{
 			pX -= 75.0*frametime;
 		}
@@ -64,7 +64,7 @@ int Player::move(float frametime, int background[400][1500])
 	}
 	if (GetAsyncKeyState((unsigned short) VK_RIGHT) & 0x8000)
 	{
-		if (pX + 50 + 75 * frametime < 1500 && (background[int(pY + 25)][int(pX + 50 + 75 * frametime)] == 208 || background[int(pY + 25)][int(pX + 25 + 75 * frametime)] == 64) && (background[int(pY + 25)][int(pX + 25 + 75 * frametime)] == 208 || background[int(pY + 25)][int(pX + 50 + 75 * frametime)] == 64))
+		//if (pX + 50 + 75 * frametime < 1500 && (background[int(pY + 25)][int(pX + 50 + 75 * frametime)] == 208 || background[int(pY + 25)][int(pX + 25 + 75 * frametime)] == 64) && (background[int(pY + 25)][int(pX + 25 + 75 * frametime)] == 208 || background[int(pY + 25)][int(pX + 50 + 75 * frametime)] == 64))
 		{
 			pX += 75.0*frametime;
 		}

@@ -5,8 +5,21 @@
 
 
 
+//finds map that was just entered
+int findMap(int x, int y)
+{
+	for (int i = 0; i < 4; i++)//cycles through maps
+	{
+		if (x == maps[i].iD[1] && y == maps[i].iD[0])
+		{
+			return maps[i].Graphic;
+		}
+	}
+	//return 0;
+}
 
 //Draws the indidual letter on the screen
+
 void drawLetters(CHAR_INFO *screen, double posX, double posY, int modX, int modY, char letter, int color)
 {
 	const int DIMENTION_W = 21;
@@ -1048,12 +1061,15 @@ void initOverworld(CHAR_INFO *screen)
 		}
 	}*/
 
-	//candy room 
+	//draw maps
+	currentmap = findMap(CurrMapPos[1],CurrMapPos[0]);
+	currentmap = 10;
 	for (int y = 0; y < h; y++)
 	{
 		for (int x = 0; x < w; x++)
 		{
-			backgound[y][x] = candyRoom[int(y / 5.715)][int(x / 9.678)] * 16;
+			//backgound[y][x] = MapList[3][int(y /5.715)][int(x / 9.678)] * 16;
+			backgound[y][x] = MapList[currentmap][int(y / maps[currentmap].hS)][int(x / maps[currentmap].wS)] * 16;
 		}
 	}
 
@@ -1575,8 +1591,15 @@ void gameloop()
 
 			dir = p.move(frametime, backgound);
 
+			if (posX > 1000)
+			{
+				CurrMapPos[0] = 2;
+				CurrMapPos[1] = 2;
+				initOverworld(screen);
+			}
 
 			//changes gamestate to combat
+			
 			if (posY >= 350)
 			{
 				gamestate = 1;
@@ -2162,6 +2185,29 @@ int main()
 	pi.itemStore(4);
 	//pi.itemStore(3);
 	//pi.itemStore(1);
+
+	//make maps cuz why not
+	maps[0].setvalues(0, 0, 0 , 9.678, 5.715);
+	maps[1].setvalues(15, 7, 1 , 5, 3.390);
+	
+	
+	maps[4].setvalues(1, 1, 4, 4,5);
+	maps[5].setvalues(1, 1, 5, 3, 3);
+	maps[6].setvalues(1, 1, 6, 5.715, 5.715);
+	maps[7].setvalues(1, 1, 7, 3, 2.5);
+	maps[8].setvalues(1, 1, 8, 3, 3);
+	maps[9].setvalues(1, 1, 9, 3, 7);
+	maps[10].setvalues(1, 1, 10, 3.8, 2.6);
+	maps[11].setvalues(1, 1, 11, 3, 4);
+	maps[12].setvalues(1, 1, 12, 3.5, 3.5);
+	maps[13].setvalues(2, 2, 13, 3, 4);
+	maps[14].setvalues(1, 1, 14, 3.8, 4.5);
+	maps[15].setvalues(1, 1, 15, 5.715, 5.715);
+
+	currentmap = 0;
+	CurrMapPos[0] = maps[0].iD[0];
+	CurrMapPos[1] = maps[0].iD[1];
+
 
 	gameloop();
 
