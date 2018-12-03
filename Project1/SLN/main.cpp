@@ -4,7 +4,7 @@
 //finds map that was just entered 
 int findMap(int x, int y)
 {
-	for (int i = 0; i < 4; i++)//cycles through maps 
+	for (int i = 0; i < 40; i++)//cycles through maps 
 	{
 		if (x == maps[i].iD[1] && y == maps[i].iD[0])
 		{
@@ -1115,7 +1115,7 @@ void initOverworld(CHAR_INFO *screen)
 
 	//draw maps
 	currentmap = findMap(CurrMapPos[1], CurrMapPos[0]);
-	//currentmap = 10;
+	currentmap = 21;
 	for (int y = 0; y < h; y++)
 	{
 		for (int x = 0; x < w; x++)
@@ -2487,8 +2487,8 @@ int main()
 	//make maps cuz why not 
 	maps[0].setvalues(0, 0, 0, 9.678, 5.715);
 	maps[1].setvalues(15, 7, 1, 5, 3.390);
-
-
+	maps[2].setvalues(1, 1, 2, 5.715, 5.715);
+	maps[3].setvalues(1, 1, 3, 5.715, 5.715);
 	maps[4].setvalues(1, 1, 4, 4, 5);
 	maps[5].setvalues(1, 1, 5, 3, 3);
 	maps[6].setvalues(1, 1, 6, 5.715, 5.715);
@@ -2500,7 +2500,14 @@ int main()
 	maps[12].setvalues(1, 1, 12, 3.5, 3.5);
 	maps[13].setvalues(2, 2, 13, 3, 4);
 	maps[14].setvalues(1, 1, 14, 3.8, 4.5);
-	maps[15].setvalues(1, 1, 15, 5.715, 5.715);
+	maps[15].setvalues(1, 1, 15, 9.678, 5.715);
+	maps[16].setvalues(1, 1, 16, 5, 5);
+	maps[17].setvalues(1, 1, 17, 1, 1);
+	maps[18].setvalues(1, 1, 18, 1, 1);
+	maps[19].setvalues(1, 1, 19, 1, 1);
+	maps[20].setvalues(1, 1, 20, 1, 1);
+	maps[21].setvalues(1, 1, 21, 1, 1);
+
 
 	currentmap = 0;
 	CurrMapPos[0] = maps[0].iD[0];
