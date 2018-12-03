@@ -2507,6 +2507,16 @@ int main()
 	maps[19].setvalues(1, 1, 19, 1, 1);
 	maps[20].setvalues(1, 1, 20, 1, 1);
 	maps[21].setvalues(1, 1, 21, 1, 1);
+	maps[22].setvalues(1, 1, 22, 1, 1);
+	maps[23].setvalues(1, 1, 23, 1, 1);
+	maps[24].setvalues(1, 1, 24, 1, 1);
+	maps[25].setvalues(1, 1, 25, 1, 1);
+	maps[26].setvalues(1, 1, 26, 1, 1);
+	maps[27].setvalues(1, 1, 27, 1, 1);
+	maps[28].setvalues(1, 1, 28, 1, 1);
+	maps[29].setvalues(1, 1, 29, 1, 1);
+	maps[30].setvalues(1, 1, 30, 1, 1);
+	maps[31].setvalues(1, 1, 31, 1, 1);
 
 
 	currentmap = 0;
