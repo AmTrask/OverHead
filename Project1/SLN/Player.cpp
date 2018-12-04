@@ -52,16 +52,23 @@ int Player::move(float frametime, int background[400][1500], int &pointNumOfStep
 		//pointNumOfStepSinceLastCheck++;
 		if (pY + 50 * frametime < 1500 && (background[int(pY + 32 + 50 * frametime)][int(pX + 10)] != 0))// || background[int(pY + 32 + 50 * frametime)][int(pX + 5)] == 64) && (background[int(pY + 32 + 50 * frametime)][int(pX + 50)] == 208 || background[int(pY + 32 + 50 * frametime)][int(pX + 25)] == 64))
 		{
-			pY += 50.0*frametime;
+			if (pY < 390)
+			{
+				pY += 50.0*frametime;
+			}
 		}
 		lastDir = 0;
 	}
 	if (GetAsyncKeyState((unsigned short)VK_LEFT) & 0x8000)
 	{
+
 		//pointNumOfStepSinceLastCheck++;
 		if (pX - 75 * frametime > 0 && (background[int(pY + 25)][int(pX - 75 * frametime)] != 0))// || background[int(pY + 25)][int(pX - 75 * frametime)] == 64) && (background[int(pY + 25)][int(pX - 75 * frametime)] == 208 || background[int(pY + 25)][int(pX - 75 * frametime)] == 64))
 		{
-			pX -= 75.0*frametime;
+			if (pX > 10)
+			{
+				pX -= 75.0*frametime;
+			}
 		}
 		lastDir = 2;
 	}

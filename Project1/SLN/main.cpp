@@ -1,5 +1,7 @@
 
 #include "Include and globals.h" 
+#include <fstream>
+std::ofstream playerPos;
 
 //finds map that was just entered 
 int findMap(int x, int y)
@@ -1201,7 +1203,10 @@ void initOverworld(CHAR_INFO *screen)
 
 	//draw maps
 	currentmap = findMap(CurrMapPos[1], CurrMapPos[0]);
-	//currentmap = 10;
+	if (currentmap == 14)
+	{
+		p.setX(250);
+	}
 	for (int y = 0; y < h; y++)
 	{
 		for (int x = 0; x < w; x++)
@@ -1767,6 +1772,9 @@ void gameloop()
 		static int lastState = 0;
 		static int fixUnknownProblem = 0;
 		
+		playerPos.open("posfile.txt");
+		playerPos << p.getX() << " , " << p.getY();
+		playerPos.close();
 
 		if (lastState != 2 * gamestate)
 		{
@@ -1820,19 +1828,41 @@ void gameloop()
 				int &pointNumOfStepSinceLastCheck = numOfStepSinceLastCheck;
 
 				dir = p.move(frametime, backgound, pointNumOfStepSinceLastCheck);
-
+				
+				
 				if (posX > 1425)
 				{
 					CurrMapPos[0] += 1;
-					p.setX(1000);
+					p.setX(100);
 
 					initOverworld(screen);
 				}
-				if (posY < 75)
+				if (currentmap == 1)
+				{
+					if (posY < 220)
+					{
+						CurrMapPos[1] = 10;
+						CurrMapPos[0] = 10;
+
+						p.setY(70);
+						p.setX(90);
+						initOverworld(screen);
+					}
+				}
+				else if (posY < 25)
 				{
 					CurrMapPos[1] += 1;
-					p.setY(200);
+					p.setY(350);
 					initOverworld(screen);
+				}
+
+				if (miniboss == false && CurrMapPos[0] == 7 && CurrMapPos[1] == 4 && posX > 750)
+
+				{
+					miniboss = true;
+					//do miniboss fight
+					gamestate = 1;
+					e.setNapstablook();
 				}
 
 				//changes gamestate to combat
@@ -2628,7 +2658,7 @@ maps[0].setvalues(0, -1, 0, 9.678, 5.715);
 	maps[6].setvalues(7, 9, 6, 5.715, 5.715);
 	maps[7].setvalues(1, 0, 7, 3, 2.5);
 	maps[8].setvalues(0, 0, 8, 3, 3);
-	maps[9].setvalues(4, 4, 9, 3, 7);
+	maps[9].setvalues(4, 4, 9, 9.6, 7);
 	maps[10].setvalues(6, 9, 10, 3.8, 2.6);
 	maps[11].setvalues(6, 9, 11, 3, 4);
 	maps[12].setvalues(7, 7, 12, 3.5, 3.5);
@@ -2637,12 +2667,12 @@ maps[0].setvalues(0, -1, 0, 9.678, 5.715);
 	maps[15].setvalues(4, 7, 15, 9.678, 5.715);
 	maps[16].setvalues(2, 0, 16, 5, 5);
 	maps[17].setvalues(3, 0, 17, 5.715, 5.715);
-	maps[18].setvalues(4, 0, 18, 5.715, 5.715);
-	maps[19].setvalues(4, 1, 19, 5.715, 5.715);
+	maps[18].setvalues(4, 0, 18, 9.678, 7.5);
+	maps[19].setvalues(4, 1, 19, 9.6, 7.5);
 	//maps[20].setvalues(4, 2, 20, 1, 1);
 	//maps[21].setvalues(5, 2, 21, 1, 1);
-	maps[22].setvalues(4, 2, 22, 5.715, 5.715);
-	maps[23].setvalues(4, 3, 23, 5.715, 5.715);
+	maps[22].setvalues(4, 2, 22, 9.6, 6);
+	maps[23].setvalues(4, 3, 23, 9.6, 8);
 	maps[24].setvalues(6, 7, 24, 5.715, 5.715);
 	maps[25].setvalues(13, 11, 25, 5.715, 5.715);
 	maps[26].setvalues(12, 11, 26, 5.715, 5.715);
@@ -2651,11 +2681,11 @@ maps[0].setvalues(0, -1, 0, 9.678, 5.715);
 	maps[29].setvalues(5, 8, 29, 5.715, 5.715);
 	maps[30].setvalues(1, 1, 30, 5.715, 5.715);
 	maps[31].setvalues(1, 1, 31, 5.715, 5.715);
-	maps[32].setvalues(4, 5, 32, 5.715, 5.715);
-	maps[33].setvalues(4, 6, 33, 5.715, 5.715);
+	maps[32].setvalues(4, 5, 32, 9.6, 7);
+	maps[33].setvalues(4, 6, 33, 9.6, 7);
 
 
-
+	p.setX(400);
 	currentmap = 0;
 	CurrMapPos[0] = 0;
 	CurrMapPos[1] = 0;

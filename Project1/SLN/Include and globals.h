@@ -24,7 +24,7 @@
 
 
 //global variables
-
+bool miniboss = false;
 const short w = 1500;
 const short h = 400;
 int gamestate = 7; //0 = overworld, 1 = initcombat, 2 = combat, 3 = init enemy attack phase, 4 = enemy attack phase //5 = enemy kill //6 = gameover //7 = title screen
