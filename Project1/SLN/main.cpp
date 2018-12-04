@@ -1821,10 +1821,17 @@ void gameloop()
 
 				dir = p.move(frametime, backgound, pointNumOfStepSinceLastCheck);
 
-				if (posX > 1000)
+				if (posX > 1425)
 				{
-					CurrMapPos[0] = 2;
-					CurrMapPos[1] = 2;
+					CurrMapPos[0] += 1;
+					p.setX(1000);
+
+					initOverworld(screen);
+				}
+				if (posY < 75)
+				{
+					CurrMapPos[1] += 1;
+					p.setY(200);
 					initOverworld(screen);
 				}
 
@@ -2273,7 +2280,6 @@ void gameloop()
 						initOverworld(screen);
 						gamestate = 0;
 						s.setState(0);
-						p.setX(0);
 						buffer2--;
 					}
 				}
@@ -2314,7 +2320,6 @@ void gameloop()
 					initOverworld(screen);
 					gamestate = 0;
 					s.setState(0);
-					p.setX(0);
 					select3 = 0;
 					buffer2 = 0;
 				}
@@ -2538,8 +2543,6 @@ void gameloop()
 				Sleep(4000); //Uses milliseconds
 				gamestate = 0;
 				initOverworld(screen);
-				p.setX(0);
-				p.setY(0);
 				WHY = 1;
 			}
 		}
@@ -2616,42 +2619,46 @@ int main()
 
 
 	//make maps cuz why not 
-	maps[0].setvalues(0, 0, 0, 9.678, 5.715);
-	maps[1].setvalues(15, 7, 1, 5, 3.390);
+maps[0].setvalues(0, -1, 0, 9.678, 5.715);
+	maps[1].setvalues(6, 8, 1, 5, 3.390);
 	maps[2].setvalues(1, 1, 2, 5.715, 5.715);
-	maps[3].setvalues(1, 1, 3, 5.715, 5.715);
-	maps[4].setvalues(1, 1, 4, 4, 5);
-	maps[5].setvalues(1, 1, 5, 3, 3);
-	maps[6].setvalues(1, 1, 6, 5.715, 5.715);
-	maps[7].setvalues(1, 1, 7, 3, 2.5);
-	maps[8].setvalues(1, 1, 8, 3, 3);
-	maps[9].setvalues(1, 1, 9, 3, 7);
-	maps[10].setvalues(1, 1, 10, 3.8, 2.6);
-	maps[11].setvalues(1, 1, 11, 3, 4);
-	maps[12].setvalues(1, 1, 12, 3.5, 3.5);
-	maps[13].setvalues(2, 2, 13, 3, 4);
-	maps[14].setvalues(1, 1, 14, 3.8, 4.5);
-	maps[15].setvalues(1, 1, 15, 9.678, 5.715);
-	maps[16].setvalues(1, 1, 16, 5, 5);
-	maps[17].setvalues(1, 1, 17, 1, 1);
-	maps[18].setvalues(1, 1, 18, 1, 1);
-	maps[19].setvalues(1, 1, 19, 1, 1);
-	maps[20].setvalues(1, 1, 20, 1, 1);
-	maps[21].setvalues(1, 1, 21, 1, 1);
-	maps[22].setvalues(1, 1, 22, 1, 1);
-	maps[23].setvalues(1, 1, 23, 1, 1);
-	maps[24].setvalues(1, 1, 24, 1, 1);
-	maps[25].setvalues(1, 1, 25, 1, 1);
-	maps[26].setvalues(1, 1, 26, 1, 1);
-	maps[27].setvalues(1, 1, 27, 1, 1);
-	maps[28].setvalues(1, 1, 28, 1, 1);
-	maps[29].setvalues(1, 1, 29, 1, 1);
-	maps[30].setvalues(1, 1, 30, 1, 1);
-	maps[31].setvalues(1, 1, 31, 1, 1);
+	maps[3].setvalues(4, 8, 3, 5.715, 5.715);
+	maps[4].setvalues(10, 11, 4, 3, 1.5);
+	maps[5].setvalues(5, 9, 5, 3, 3);
+	maps[6].setvalues(7, 9, 6, 5.715, 5.715);
+	maps[7].setvalues(1, 0, 7, 3, 2.5);
+	maps[8].setvalues(0, 0, 8, 3, 3);
+	maps[9].setvalues(4, 4, 9, 3, 7);
+	maps[10].setvalues(6, 9, 10, 3.8, 2.6);
+	maps[11].setvalues(6, 9, 11, 3, 4);
+	maps[12].setvalues(7, 7, 12, 3.5, 3.5);
+	maps[13].setvalues(10, 10, 13, 3, 4);
+	maps[14].setvalues(5, 7, 14, 3.8, 4.5);
+	maps[15].setvalues(4, 7, 15, 9.678, 5.715);
+	maps[16].setvalues(2, 0, 16, 5, 5);
+	maps[17].setvalues(3, 0, 17, 5.715, 5.715);
+	maps[18].setvalues(4, 0, 18, 5.715, 5.715);
+	maps[19].setvalues(4, 1, 19, 5.715, 5.715);
+	//maps[20].setvalues(4, 2, 20, 1, 1);
+	//maps[21].setvalues(5, 2, 21, 1, 1);
+	maps[22].setvalues(4, 2, 22, 5.715, 5.715);
+	maps[23].setvalues(4, 3, 23, 5.715, 5.715);
+	maps[24].setvalues(6, 7, 24, 5.715, 5.715);
+	maps[25].setvalues(13, 11, 25, 5.715, 5.715);
+	maps[26].setvalues(12, 11, 26, 5.715, 5.715);
+	maps[27].setvalues(11, 11, 27, 5.715, 5.715);
+	maps[28].setvalues(1, 1, 28, 5.715, 5.715);
+	maps[29].setvalues(5, 8, 29, 5.715, 5.715);
+	maps[30].setvalues(1, 1, 30, 5.715, 5.715);
+	maps[31].setvalues(1, 1, 31, 5.715, 5.715);
+	maps[32].setvalues(4, 5, 32, 5.715, 5.715);
+	maps[33].setvalues(4, 6, 33, 5.715, 5.715);
+
+
 
 	currentmap = 0;
-	CurrMapPos[0] = maps[0].iD[0];
-	CurrMapPos[1] = maps[0].iD[1];
+	CurrMapPos[0] = 0;
+	CurrMapPos[1] = 0;
 
 
 	gameloop();

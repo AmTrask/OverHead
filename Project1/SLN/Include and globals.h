@@ -32,7 +32,7 @@ int backgound[h][w] = { {} };
 int dir = 0;
 
 
-Player p(800, 200);
+Player p(1000, 150);
 Player p2(220, 750); //X and Y are backwards for this one HURRAY!!!
 Enemy e;
 State s;
