@@ -23,7 +23,10 @@ void playGameOver()
 {
 	PlaySound("gameover.wav", NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
 }
-
+void playTorielFight()
+{
+	PlaySound("Last stand.wav", NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
+}
 
 
 

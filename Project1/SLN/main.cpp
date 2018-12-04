@@ -1795,8 +1795,16 @@ void gameloop()
 		}
 		if (fixUnknownProblem == 2)
 		{
-			playFight();
-			fixUnknownProblem++;
+			if (e.getMonsterID() == 2)
+			{
+				playTorielFight();
+				fixUnknownProblem++;
+			}
+			else
+			{
+				playFight();
+				fixUnknownProblem++;
+			}
 		}
 		if (fixUnknownProblem == 10)
 		{

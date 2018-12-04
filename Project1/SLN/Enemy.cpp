@@ -17,14 +17,14 @@ void Enemy::setNapstablook()
 	attack = 10;
 	tillMercyPoints = 4;
 	missingHealth = 0;
-	defence = 10;
+	defence = 5;
 	numberOfActs = 4;
 	whatLowersMercyPoints = 3;
 	possibleActs[0] = { "*CHECK" };
 	possibleActs[1] = { "*FLIRT"};
 	possibleActs[2] = { "*THREAT" };
 	possibleActs[3] = { "*CHEER" };
-	responces[0] = { "*NAPSTABLOOK ATK-10 DEF-10" };
+	responces[0] = { "*NAPSTABLOOK ATK-10 DEF-5" };
 	responces[1] = { "*YOU CANNOT FLIRT WITH A GHOST" };
 	responces[2] = { "*YOU CANNOT THREATEN THIS GHOST" };
 	responces[3] = { "*YOU CHEER UP NAPSTABLOOK" };
@@ -55,7 +55,7 @@ void Enemy::setFroggit()
 }
 void Enemy::setToriel()
 {
-	health = 480;
+	health = 300;
 	attack = 20;
 	tillMercyPoints = 20;
 	missingHealth = 0;
