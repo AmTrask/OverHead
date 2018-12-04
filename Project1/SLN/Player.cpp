@@ -118,7 +118,7 @@ void Player::setX(double x)
 }
 void Player::setY(double y)
 {
-	pX = y;
+	pY = y;
 }
 
 double Player::getX()
