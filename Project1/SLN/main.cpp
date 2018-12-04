@@ -1207,6 +1207,12 @@ void initOverworld(CHAR_INFO *screen)
 	{
 		p.setX(250);
 	}
+	if (CurrMapPos[0] == 11 && CurrMapPos[1] == 10)
+	{
+			p.setY(315);
+			p.setX(25);
+	}
+	//currentmap = 13;
 	for (int y = 0; y < h; y++)
 	{
 		for (int x = 0; x < w; x++)
@@ -1830,13 +1836,7 @@ void gameloop()
 				dir = p.move(frametime, backgound, pointNumOfStepSinceLastCheck);
 				
 				
-				if (posX > 1425)
-				{
-					CurrMapPos[0] += 1;
-					p.setX(100);
-
-					initOverworld(screen);
-				}
+				
 				if (currentmap == 1)
 				{
 					if (posY < 220)
@@ -1849,13 +1849,20 @@ void gameloop()
 						initOverworld(screen);
 					}
 				}
+				
 				else if (posY < 25)
 				{
 					CurrMapPos[1] += 1;
 					p.setY(350);
 					initOverworld(screen);
 				}
+				if (posX > 1425)
+				{
+					CurrMapPos[0] += 1;
+					p.setX(100);
 
+					initOverworld(screen);
+				}
 				if (miniboss == false && CurrMapPos[0] == 7 && CurrMapPos[1] == 4 && posX > 750)
 
 				{
@@ -1863,6 +1870,15 @@ void gameloop()
 					//do miniboss fight
 					gamestate = 1;
 					e.setNapstablook();
+				}
+
+				if (boss == false && CurrMapPos[0] == 11 && CurrMapPos[1] == 10 && p.getY() < 100)
+
+				{
+					boss = true;
+					//do miniboss fight
+					gamestate = 1;
+					e.setToriel();
 				}
 
 				//changes gamestate to combat
@@ -1879,7 +1895,7 @@ void gameloop()
 
 						std::mt19937 rand;
 						rand.seed(std::random_device()());
-						std::uniform_int_distribution<std::mt19937::result_type> random(1, 4); // distribution in range [1, 4] 
+						std::uniform_int_distribution<std::mt19937::result_type> random(3, 4); // distribution in range [1, 4] 
 						int monsterID = random(rand);
 						switch (monsterID)
 						{
@@ -2685,10 +2701,11 @@ maps[0].setvalues(0, -1, 0, 9.678, 5.715);
 	maps[33].setvalues(4, 6, 33, 9.6, 7);
 
 
-	p.setX(400);
+	//p.setX(400);
 	currentmap = 0;
 	CurrMapPos[0] = 0;
 	CurrMapPos[1] = 0;
+
 
 
 	gameloop();

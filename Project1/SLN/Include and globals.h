@@ -24,6 +24,7 @@
 
 
 //global variables
+bool boss = false;
 bool miniboss = false;
 const short w = 1500;
 const short h = 400;
